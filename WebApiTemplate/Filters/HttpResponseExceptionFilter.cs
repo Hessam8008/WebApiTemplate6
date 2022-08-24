@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using WebApiTemplate.Models;
 
-namespace WebApiTemplate.Controllers;
+namespace WebApiTemplate.Filters;
 
 public class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
 {

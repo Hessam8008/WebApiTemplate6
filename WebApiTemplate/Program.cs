@@ -1,13 +1,17 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
-using WebApiTemplate.Controllers;
+using WebApiTemplate.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 /* Add services to the container */
 
 builder.Services.AddControllers(
-        options => { options.Filters.Add<HttpResponseExceptionFilter>(); }
+        options =>
+        {
+            // Add filtering for exceptions
+            options.Filters.Add<HttpResponseExceptionFilter>();
+        }
     )
 
     // Validation failure error response 
@@ -42,13 +46,17 @@ var app = builder.Build();
 
 /* Configure the HTTP request pipeline */
 
-app.UseSwagger();
-app.UseSwaggerUI();
 
 if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.UseExceptionHandler("/error-development");
+}
 else
+{
     app.UseExceptionHandler("/error");
+}
 
 app.UseHttpsRedirection();
 

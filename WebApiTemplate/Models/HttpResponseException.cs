@@ -1,4 +1,4 @@
-namespace WebApiTemplate.Controllers;
+namespace WebApiTemplate.Models;
 
 public class HttpResponseException : Exception
 {
