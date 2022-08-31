@@ -1,27 +1,46 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApiTemplate.Models;
+using WebApiTemplate.Domain.Models;
+using static WebApiTemplate.Controllers.ErrorHandlingController;
 
 namespace WebApiTemplate.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class PersonController : ControllerBase
 {
-    [HttpGet("Throw")]
-    public IActionResult ThrowEx()
+    [HttpGet("SystemException")]
+    [ProducesResponseType(typeof(HttpExceptionResponse), StatusCodes.Status500InternalServerError)]
+    public IActionResult SystemException()
     {
-        throw new Exception("System exception.");
+        var p = new Person
+        {
+            Name = @"Bob"
+        };
+        p.SetBirthDate(2022, 13, 32);
+        return Ok(p);
     }
 
-    [HttpGet("ThrowHttpEx")]
-    public IActionResult ThrowHttpEx()
+    [HttpPut("DomainException")]
+    [ProducesResponseType(typeof(HttpExceptionResponse), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(HttpDomainErrorResponse), ExtraStatusCodes.Status499DomainError)]
+    [ProducesResponseType(typeof(Person), StatusCodes.Status200OK)]
+    public IActionResult DomainException()
     {
-        throw new HttpResponseException(302, "Http exception.");
+        var p = Person.Create();
+        p.ChangeNation("iran"); // Domain exception raise here
+        return Ok(p);
     }
 
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult GetById(int id = 258)
     {
-        return Ok(id);
+        return Ok();
     }
 
 
@@ -33,6 +52,6 @@ public class PersonController : ControllerBase
         if (data == null)
             return BadRequest();
 
-        return CreatedAtAction(nameof(GetById), new {id = DateTime.Now.Millisecond}, data);
+        return CreatedAtAction(nameof(GetById), new {id = DateTime.Now.Millisecond}, new {data});
     }
 }
