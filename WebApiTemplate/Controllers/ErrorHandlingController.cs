@@ -18,7 +18,7 @@ public class ErrorHandlingController : ControllerBase
 
         /*---- Business Errors ----*/
         if (exceptionHandlerFeature.Error is DomainException exception)
-            return new ObjectResult(new HttpDomainErrorResponse(exception.Message)) {StatusCode = 499};
+            return new ObjectResult(new HttpDomainErrorResponse(exception)) {StatusCode = 499};
 
 
         /*---- Unhandled Errors ----*/
@@ -53,12 +53,29 @@ public class ErrorHandlingController : ControllerBase
 
         return result;
     }
-
-    public record HttpExceptionResponse(List<ExceptionDetails> Exception);
-
-    public record ExceptionDetails(string Message, List<ExceptionFrame>? Frames);
-
-    public record ExceptionFrame(string? Method, string? Path, int LineNumber);
-
-    public record HttpDomainErrorResponse(string Message, int Code = 0);
 }
+
+#region Exceptions & Errors Responses Records
+
+/* ~~~~~~ Exception ~~~~~~ */
+public record HttpExceptionResponse(List<ExceptionDetails> Exceptions);
+
+public record ExceptionDetails(string Message, List<ExceptionFrame>? Frames);
+
+public record ExceptionFrame(string? Method, string? Path, int LineNumber);
+
+/* ~~~~~~~ Domain ~~~~~~~ */
+public record HttpDomainErrorResponse
+{
+    public List<DomainError> Errors { get; } = new();
+
+    public HttpDomainErrorResponse(DomainException exception)
+    {
+        foreach (var e in exception.Details)
+            Errors.Add(new DomainError(e.Message, e.Code));
+    }
+}
+
+public record DomainError(string Message, int Code = 0);
+
+#endregion

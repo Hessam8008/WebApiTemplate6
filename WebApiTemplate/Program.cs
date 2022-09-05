@@ -1,16 +1,23 @@
 using System.Net.Mime;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using WebApiTemplate.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 /* Add services to the container */
-
 builder.Services.AddControllers(
         options =>
         {
-            // Add filtering for exceptions
-            //options.Filters.Add<HttpResponseExceptionFilter>();
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status403Forbidden));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status401Unauthorized));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status400BadRequest));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status404NotFound));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status410Gone));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(HttpDomainErrorResponse),
+                ExtraStatusCodes.Status499DomainError));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(HttpExceptionResponse),
+                StatusCodes.Status500InternalServerError));
         }
     )
 
@@ -41,9 +48,7 @@ var app = builder.Build();
 
 
 /* Configure the HTTP request pipeline */
-
-
-if (true || app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
