@@ -57,17 +57,41 @@ public class ErrorHandlingController : ControllerBase
 
 #region Exceptions & Errors Responses Records
 
+/*
+ * Attention: Do NOT remove parameter less constructors.
+ *            They are require for serialization.
+ */
+
 /* ~~~~~~ Exception ~~~~~~ */
-public record HttpExceptionResponse(List<ExceptionDetails> Exceptions);
+public record HttpExceptionResponse(List<ExceptionDetails> Exceptions)
+{
+    public HttpExceptionResponse() : this(new List<ExceptionDetails>())
+    {
+    }
+}
 
-public record ExceptionDetails(string Message, List<ExceptionFrame>? Frames);
+public record ExceptionDetails(string Message, List<ExceptionFrame>? Frames)
+{
+    public ExceptionDetails() : this(string.Empty, null)
+    {
+    }
+}
 
-public record ExceptionFrame(string? Method, string? Path, int LineNumber);
+public record ExceptionFrame(string? Method, string? Path, int LineNumber)
+{
+    public ExceptionFrame() : this(null, null, 0)
+    {
+    }
+}
 
 /* ~~~~~~~ Domain ~~~~~~~ */
 public record HttpDomainErrorResponse
 {
     public List<DomainError> Errors { get; } = new();
+
+    public HttpDomainErrorResponse()
+    {
+    }
 
     public HttpDomainErrorResponse(DomainException exception)
     {
@@ -76,6 +100,11 @@ public record HttpDomainErrorResponse
     }
 }
 
-public record DomainError(string Message, int Code = 0);
+public record DomainError(string Message, int Code = 0)
+{
+    public DomainError() : this(string.Empty)
+    {
+    }
+}
 
 #endregion

@@ -8,7 +8,7 @@ public class Person
     public Gender Gender { get; set; }
     public string? NationCode { get; set; }
     public string? Nationality { get; set; }
-
+    public DateTime CreateTime { get; set; }
 
     public void ChangeNation(string newNation)
     {
