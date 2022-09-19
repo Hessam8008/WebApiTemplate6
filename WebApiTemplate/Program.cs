@@ -1,15 +1,29 @@
+using Serilog;
 using WebApiTemplate.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
-/* Configure services */
-builder.ConfigureServices();
+    /* Configure services */
+    builder.ConfigureServices();
 
-/* Build app */
-var app = builder.Build();
+    /* Build app */
+    var app = builder.Build();
 
-/* Configure pipeline */
-app.ConfigurePipeline();
+    /* Configure pipeline */
+    app.ConfigurePipeline();
 
-/* Run application */
-app.Run();
+    /* Run application */
+    Log.Information("Service Started.");
+    app.Run();
+}
+catch (Exception exception)
+{
+    Log.Fatal(exception, "Fatal error on startup.");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}

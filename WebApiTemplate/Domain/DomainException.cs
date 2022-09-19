@@ -29,9 +29,10 @@ public class DomainException : Exception
         Details.Add(new ExceptionDetails(message, code));
     }
 
-    public void Add(string message, int code = 0)
+    public DomainException Add(string message, int code = 0)
     {
         Details.Add(new ExceptionDetails(message, code));
+        return this;
     }
 
     public void ThrowIfNeeded()

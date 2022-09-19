@@ -22,7 +22,7 @@
       "InjectHttpClient": true,
       "DisposeHttpClient": true,
       "ProtectedMethods": [],
-      "GenerateExceptionClasses": false,
+      "GenerateExceptionClasses": true,
       "ExceptionClass": "ApiException",
       "WrapDtoExceptions": true,
       "UseHttpClientCreationMethod": false,

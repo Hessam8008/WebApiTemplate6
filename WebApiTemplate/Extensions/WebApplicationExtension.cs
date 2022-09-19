@@ -1,7 +1,13 @@
-﻿namespace WebApiTemplate.Extensions;
+﻿using Serilog;
+
+namespace WebApiTemplate.Extensions;
 
 public static class WebApplicationExtension
 {
+    /// <summary>
+    ///     Configure services. At the end of the method, builder.Build() calls.
+    /// </summary>
+    /// <param name="builder">Web application builder</param>
     public static void ConfigureServices(this WebApplicationBuilder builder)
     {
         /* Add services to the container */
@@ -14,12 +20,18 @@ public static class WebApplicationExtension
         /* Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle */
         builder.Services.AddEndpointsApiExplorer(); //
         builder.Services.AddSwaggerGen(options => options.Configure());
+
+        /* Log configuration */
+        builder.Host.UseSerilog((ctx, lc) =>
+            lc.ReadFrom.Configuration(ctx.Configuration));
     }
 
 
     public static void ConfigurePipeline(this WebApplication app)
     {
         /* Configure the HTTP request pipeline */
+        app.UseSerilogRequestLogging(options => options.Configuration());
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

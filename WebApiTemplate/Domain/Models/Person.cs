@@ -13,7 +13,7 @@ public class Person
     public void ChangeNation(string newNation)
     {
         if (newNation.Equals("iran"))
-            throw new DomainException("Iran is in the black list.", 200);
+            throw new DomainException("Iran is in the black list.", 200).Add("You are not allowed to do this.", 201);
 
         Nationality = newNation;
     }
