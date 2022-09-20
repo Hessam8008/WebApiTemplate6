@@ -14,7 +14,7 @@ public class DomainException : Exception
             return count switch
             {
                 1 => Details.First().Message,
-                > 1 => "Some errors occurred in the domain. For more information look at the details.",
+                > 1 => Details.Select(e => e.Message).Aggregate((a, b) => $"{a}{Environment.NewLine}{b}"),
                 _ => "No error found."
             };
         }
