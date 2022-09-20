@@ -1,6 +1,8 @@
 using System.Diagnostics;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using WebApiTemplate.Domain;
 
 namespace WebApiTemplate.Controllers;
@@ -8,14 +10,6 @@ namespace WebApiTemplate.Controllers;
 [ApiController]
 public class ErrorHandlingController : ControllerBase
 {
-    private readonly ILogger<ErrorHandlingController> _logger;
-
-
-    public ErrorHandlingController(ILogger<ErrorHandlingController> logger)
-    {
-        _logger = logger;
-    }
-
     [Route("/error")]
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult HandleErrorDevelopment([FromServices] IHostEnvironment hostEnvironment)
@@ -23,10 +17,14 @@ public class ErrorHandlingController : ControllerBase
         var exceptionHandlerFeature =
             HttpContext.Features.Get<IExceptionHandlerFeature>()!;
 
+        var log = Log.ForContext<ErrorHandlingController>()
+            .ForContext("UserId", User.Identity.GetUserId())
+            .ForContext("UserName", User.Identity.GetUserName());
+
         /*---- Business Errors ----*/
         if (exceptionHandlerFeature.Error is DomainException exception)
         {
-            _logger.LogError($"{exception.Message}. Details: {{@Details}}", exception.Details);
+            log.ForContext("Details", exception.Details, true).Warning(exception.Message);
             return new ObjectResult(new HttpDomainErrorResponse(exception)) {StatusCode = 499};
         }
 
@@ -37,8 +35,7 @@ public class ErrorHandlingController : ControllerBase
             ? new HttpExceptionResponse(detail)
             : new HttpExceptionResponse(new ExceptionDetails("An error has occurred. Call the administrator.", null));
 
-        _logger.LogError($"{detail.FirstOrDefault()?.Message ?? "System Error."} Details: {{@Details}}", detail);
-
+        log.ForContext("Details", detail, true).Error($"{detail.FirstOrDefault()?.Message ?? "System Error."}");
         return new ObjectResult(exResponse) {StatusCode = StatusCodes.Status500InternalServerError};
     }
 
