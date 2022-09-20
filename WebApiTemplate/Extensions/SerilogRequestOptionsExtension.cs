@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using System.Security.Principal;
+﻿using Microsoft.AspNet.Identity;
 using Serilog.AspNetCore;
 using Serilog.Events;
 
@@ -20,19 +19,8 @@ public static class SerilogRequestOptionsExtension
         {
             diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
             diagnosticContext.Set("RequestProtocol", httpContext.Request.Protocol);
-            diagnosticContext.Set("UserName", GetUserName(httpContext.User));
-            diagnosticContext.Set("UserId", GetUserId(httpContext.User));
+            diagnosticContext.Set("UserName", httpContext.User.Identity.GetUserName());
+            diagnosticContext.Set("UserId", httpContext.User.Identity.GetUserId());
         };
-    }
-
-
-    private static string? GetUserName(IPrincipal user)
-    {
-        return user.Identity is {IsAuthenticated: true} ? user.Identity.Name : Environment.UserName;
-    }
-
-    private static string? GetUserId(ClaimsPrincipal user)
-    {
-        return user.Identity is {IsAuthenticated: true} ? user.FindFirstValue("sub") : "Unknown";
     }
 }
