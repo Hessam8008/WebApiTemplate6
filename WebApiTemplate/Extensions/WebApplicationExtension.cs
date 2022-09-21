@@ -40,6 +40,8 @@ public static class WebApplicationExtension
 
         app.UseExceptionHandler("/error");
 
+        app.UseHsts();
+
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
