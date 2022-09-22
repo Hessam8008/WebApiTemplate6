@@ -43,7 +43,8 @@ public class Person
             BirthDate = new DateOnly(1985, 11, 21),
             Gender = Gender.Male,
             NationCode = "0946507767",
-            Nationality = "Germany"
+            Nationality = "Germany",
+            CreateTime = DateTime.Now
         };
     }
 

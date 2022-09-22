@@ -37,11 +37,12 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(PersonDto), StatusCodes.Status200OK)]
     public IActionResult GetById(int id = 258)
     {
         if (id < 100)
             return NotFound();
-        return Ok();
+        return Ok(new PersonDto(Person.Create()));
     }
 
 
