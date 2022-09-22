@@ -401,6 +401,36 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
           }
         }
       }
@@ -646,6 +676,45 @@
           },
           "createTime": {
             "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PersonDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "readOnly": true,
+            "nullable": true
+          },
+          "birthDate": {
+            "type": "string",
+            "readOnly": true,
+            "format": "date"
+          },
+          "gender": {
+            "$ref": "#/components/schemas/Gender"
+          },
+          "nationCode": {
+            "type": "string",
+            "readOnly": true,
+            "nullable": true
+          },
+          "nationality": {
+            "type": "string",
+            "readOnly": true,
+            "nullable": true
+          },
+          "createTime": {
+            "type": "string",
+            "readOnly": true,
             "format": "date-time"
           }
         }

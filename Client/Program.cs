@@ -1,7 +1,16 @@
+using Client;
+using Client.Pages;
+using Client.WebApiService;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IWebApiService, WebApiService>();
+builder.Services.AddScoped<ExceptionHandler>();
+builder.Services.AddScoped<IExceptionNotifier, ExceptionNotifier>();
 
 var app = builder.Build();
 
@@ -23,3 +32,4 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+

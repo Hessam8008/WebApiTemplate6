@@ -7,4 +7,10 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <a asp-page="Index" asp-page-handler="CallTheService">Call System Exception</a>
+    
+    <a asp-page="Index" asp-page-handler="CallTheDomain">Call Domain Exception</a>
+    
+    
+    <label asp-for="Confirmation">@Model.Confirmation</label>
 </div>
