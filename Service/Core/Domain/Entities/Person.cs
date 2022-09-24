@@ -3,9 +3,8 @@ using Domain.Primitives;
 
 namespace Domain.Entities;
 
-public class Person
+public sealed class Person : Entity
 {
-    public int Id { get; private set; }
     public string? Name { get; private set; }
     public DateOnly BirthDate { get; private set; }
     public Gender Gender { get; private set; }
@@ -39,9 +38,8 @@ public class Person
 
     public static Person Create()
     {
-        return new Person
+        return new Person(Guid.NewGuid())
         {
-            Id = DateTime.Now.GetHashCode(),
             Name = "Hessam Hosseini ",
             BirthDate = new DateOnly(1985, 11, 21),
             Gender = Gender.Male,
@@ -54,5 +52,9 @@ public class Person
     public void SetBirthDate(int y, int m, int d)
     {
         BirthDate = new DateOnly(y, m, d);
+    }
+
+    protected Person(Guid id) : base(id)
+    {
     }
 }

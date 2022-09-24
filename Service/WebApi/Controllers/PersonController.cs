@@ -10,10 +10,7 @@ public class PersonController : ControllerBase
     [HttpGet("SystemException")]
     public IActionResult SystemException()
     {
-        var p = new Person
-        {
-            Name = @"Bob"
-        };
+        var p = Person.Create();
         p.SetBirthDate(2022, 13, 32);
         return Ok(p);
     }
