@@ -40,7 +40,7 @@ public sealed class Person : Entity
     {
         return new Person(Guid.NewGuid())
         {
-            Name = "Hessam Hosseini ",
+            Name = "Hessam Hosseini",
             BirthDate = new DateOnly(1985, 11, 21),
             Gender = Gender.Male,
             NationCode = "0946507767",
