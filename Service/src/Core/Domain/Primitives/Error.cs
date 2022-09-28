@@ -3,6 +3,14 @@
 public sealed class Error : ValueObject
 {
     /// <summary>
+    ///     Gets the empty error instance.
+    /// </summary>
+    public static readonly Error None = new(string.Empty, string.Empty);
+
+    public static readonly Error NullValue = new("Error.NullValue", "The specified result value is null.");
+
+
+    /// <summary>
     ///     Initializes a new instance of the <see cref="Error" /> class.
     /// </summary>
     /// <param name="code">The error code.</param>
@@ -23,10 +31,6 @@ public sealed class Error : ValueObject
     /// </summary>
     public string Message { get; }
 
-    /// <summary>
-    ///     Gets the empty error instance.
-    /// </summary>
-    internal static Error None => new(string.Empty, string.Empty);
 
     public static implicit operator string(Error error)
     {
