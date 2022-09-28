@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Domain.Errors;
 using Domain.Exceptions;
 using Domain.Primitives;
 using Domain.Primitives.Result;
@@ -21,7 +22,7 @@ public sealed class Person : Entity
     public Result ChangeNation(string newNation)
     {
         if (newNation.Equals("iran"))
-            return Result.Failure(new Error("Person.BlackListCountry", "Iran is in the black list."));
+            return Result.Failure(DomainErrors.Person.BlockedNationality);
 
 
         Nationality = newNation;
