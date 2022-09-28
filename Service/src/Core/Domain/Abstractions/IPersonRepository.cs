@@ -4,5 +4,11 @@ namespace Domain.Abstractions;
 
 public interface IPersonRepository
 {
-    Task Insert(Person person);
+    Task InsertAsync(Person person);
+
+    Task<Person?> SelectAsync(Guid id);
+
+    Task UpdateAsync(Person person);
+
+    Task DeleteAsync(Guid id);
 }

@@ -1,6 +1,7 @@
 ﻿using Domain.Enums;
 using Domain.Exceptions;
 using Domain.Primitives;
+using Domain.Primitives.Result;
 
 namespace Domain.Entities;
 
@@ -17,12 +18,14 @@ public sealed class Person : Entity
     public string? Nationality { get; private set; }
     public DateTime CreateTime { get; private set; }
 
-    public void ChangeNation(string newNation)
+    public Result ChangeNation(string newNation)
     {
         if (newNation.Equals("iran"))
-            throw new DomainException("Iran is in the black list.", 200).Add("You are not allowed to do this.", 201);
+            return Result.Failure(new Error("Person.BlackListCountry", "Iran is in the black list."));
+
 
         Nationality = newNation;
+        return Result.Success();
     }
 
     public void ChangeNationCode(string code)
