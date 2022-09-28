@@ -1,19 +1,10 @@
 ﻿using Domain.Entities;
-using Domain.Primitives;
+using Domain.Enums;
 
 namespace Presentation.Controllers;
 
 public record PersonDto()
 {
-    public Guid Id { get; }
-    public string Name { get; }
-
-    public DateOnly BirthDate { get; }
-    public Gender Gender { get; }
-    public string NationCode { get; }
-    public string Nationality { get; }
-    public DateTime CreateTime { get; }
-
     public PersonDto(Person person) : this()
     {
         Id = person.Id;
@@ -24,4 +15,13 @@ public record PersonDto()
         Nationality = person.Nationality;
         CreateTime = person.CreateTime;
     }
+
+    public Guid Id { get; }
+    public string Name { get; }
+
+    public DateOnly BirthDate { get; }
+    public Gender Gender { get; }
+    public string NationCode { get; }
+    public string Nationality { get; }
+    public DateTime CreateTime { get; }
 }

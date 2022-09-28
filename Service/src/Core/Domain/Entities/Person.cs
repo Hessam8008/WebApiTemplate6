@@ -1,10 +1,15 @@
-﻿using Domain.Exceptions;
+﻿using Domain.Enums;
+using Domain.Exceptions;
 using Domain.Primitives;
 
 namespace Domain.Entities;
 
 public sealed class Person : Entity
 {
+    protected Person(Guid id) : base(id)
+    {
+    }
+
     public string? Name { get; private set; }
     public DateOnly BirthDate { get; private set; }
     public Gender Gender { get; private set; }
@@ -52,9 +57,5 @@ public sealed class Person : Entity
     public void SetBirthDate(int y, int m, int d)
     {
         BirthDate = new DateOnly(y, m, d);
-    }
-
-    protected Person(Guid id) : base(id)
-    {
     }
 }
