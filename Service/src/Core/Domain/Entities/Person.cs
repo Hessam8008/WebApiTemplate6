@@ -3,6 +3,7 @@ using Domain.Errors;
 using Domain.Exceptions;
 using Domain.Primitives;
 using Domain.Primitives.Result;
+using Domain.ValueObjects;
 
 namespace Domain.Entities;
 
@@ -12,7 +13,8 @@ public sealed class Person : Entity
     {
     }
 
-    public string? Name { get; private set; }
+    public FirstName FirstName { get; private set; }
+    public LastName LastName { get; private set; }
     public DateOnly BirthDate { get; private set; }
     public Gender Gender { get; private set; }
     public string? NationCode { get; private set; }
@@ -45,11 +47,12 @@ public sealed class Person : Entity
     }
 
 
-    public static Person Create()
+    public static Person Create(FirstName firstName, LastName lastName)
     {
         return new Person(Guid.NewGuid())
         {
-            Name = "Hessam Hosseini",
+            FirstName = firstName,
+            LastName = lastName,
             BirthDate = new DateOnly(1985, 11, 21),
             Gender = Gender.Male,
             NationCode = "0946507767",
