@@ -29,8 +29,19 @@ public class Result<TValue> : Result
         ? _value
         : throw new InvalidOperationException("The value of a failure result can not be accessed.");
 
+
     public static implicit operator Result<TValue>(TValue value)
     {
         return Success(value);
+    }
+
+    public static implicit operator Result<TValue>(Error error)
+    {
+        return Failure<TValue>(error);
+    }
+
+    public static implicit operator TValue(Result<TValue> result)
+    {
+        return result.Value;
     }
 }

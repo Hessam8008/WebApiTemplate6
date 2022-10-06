@@ -1,4 +1,5 @@
-﻿using Domain.Primitives;
+﻿using Domain.Errors;
+using Domain.Primitives;
 using Domain.Primitives.Result;
 
 namespace Domain.ValueObjects;
@@ -16,13 +17,15 @@ public sealed class FirstName : ValueObject
     public string Value { get; }
 
 
-    public Result<FirstName> Create(string firstName)
+    public static Result<FirstName> Create(string? firstName)
     {
         if (string.IsNullOrWhiteSpace(firstName))
-            return Result.Failure<FirstName>(new Error("FirstName.Empty", "First name is empty."));
+            return DomainErrors.Person.EmptyFirstName;
+
+        firstName = firstName.Trim();
 
         return firstName.Length > MaxLength
-            ? Result.Failure<FirstName>(new Error("FirstName.MaxLength", "First name is too long."))
+            ? DomainErrors.Person.TooLongFirstName
             : new FirstName(firstName);
     }
 
@@ -30,5 +33,10 @@ public sealed class FirstName : ValueObject
     protected override IEnumerable<object> GetAtomicValues()
     {
         yield return Value;
+    }
+
+    public static implicit operator string(FirstName value)
+    {
+        return value.Value;
     }
 }

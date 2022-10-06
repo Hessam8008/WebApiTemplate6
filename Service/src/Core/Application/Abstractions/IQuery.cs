@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domain.Primitives.Result;
+using MediatR;
 
 namespace Application.Abstractions;
 
@@ -6,6 +7,6 @@ namespace Application.Abstractions;
 ///     Represents the query interface.
 /// </summary>
 /// <typeparam name="TResponse">The query response type.</typeparam>
-public interface IQuery<out TResponse> : IRequest<TResponse>
+public interface IQuery<TResponse> : IRequest<Result<TResponse>>
 {
 }

@@ -1,4 +1,6 @@
-﻿namespace Domain.Primitives.Result;
+﻿using Domain.Errors;
+
+namespace Domain.Primitives.Result;
 
 /// <summary>
 ///     Represents a result of some operation, with status information and possibly an error.
@@ -12,13 +14,23 @@ public class Result
     /// <param name="error">The error.</param>
     protected Result(bool isSuccess, Error error)
     {
-        if (isSuccess && error != Error.None) throw new InvalidOperationException();
-
-        if (!isSuccess && error == Error.None) throw new InvalidOperationException();
-
-        IsSuccess = isSuccess;
-        Error = error;
+        switch (isSuccess)
+        {
+            case true when error != Error.None:
+                throw new InvalidOperationException();
+            case false when error == Error.None:
+                throw new InvalidOperationException();
+            default:
+                IsSuccess = isSuccess;
+                Error = error;
+                break;
+        }
     }
+
+    protected Result()
+    {
+    }
+
 
     /// <summary>
     ///     Gets a value indicating whether the result is a success result.
@@ -41,7 +53,7 @@ public class Result
     /// <returns>A new instance of <see cref="Result" /> with the success flag set.</returns>
     public static Result Success()
     {
-        return new(true, Error.None);
+        return new Result(true, Error.None);
     }
 
     /// <summary>
@@ -52,7 +64,7 @@ public class Result
     /// <returns>A new instance of <see cref="Result{TValue}" /> with the success flag set.</returns>
     public static Result<TValue> Success<TValue>(TValue value)
     {
-        return new(value, true, Error.None);
+        return new Result<TValue>(value, true, Error.None);
     }
 
     /// <summary>
@@ -75,7 +87,7 @@ public class Result
     /// <returns>A new instance of <see cref="Result" /> with the specified error and failure flag set.</returns>
     public static Result Failure(Error error)
     {
-        return new(false, error);
+        return new Result(false, error);
     }
 
     /// <summary>
@@ -90,7 +102,7 @@ public class Result
     /// </remarks>
     public static Result<TValue> Failure<TValue>(Error error)
     {
-        return new(default!, false, error);
+        return new Result<TValue>(default!, false, error);
     }
 
     /// <summary>
@@ -108,6 +120,23 @@ public class Result
                 return result;
 
         return Success();
+    }
+
+    public static implicit operator Result(Error error)
+    {
+        return Failure(error);
+    }
+
+    public static Result Combine(params Result[] results)
+    {
+        var errors =
+            (from result in results
+                where result.IsFailure
+                select result.Error).ToList();
+
+        return errors.Any()
+            ? DomainErrors.General.MultiError(errors.ToArray())
+            : Success();
     }
 }
 

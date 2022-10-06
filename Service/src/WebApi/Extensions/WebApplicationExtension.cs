@@ -1,4 +1,8 @@
-﻿using Serilog;
+﻿using Domain.Abstractions;
+using Infrastructure;
+using Infrastructure.Repositories;
+using MediatR;
+using Serilog;
 
 namespace WebApi.Extensions;
 
@@ -10,12 +14,10 @@ public static class WebApplicationExtension
     /// <param name="builder">Web application builder</param>
     public static void ConfigureServices(this WebApplicationBuilder builder)
     {
-        var presentationAssembly = typeof(Presentation.AssemblyReference).Assembly;
-
         /* Add services to the container */
         builder.Services
             .AddControllers(options => options.Configure())
-            .AddApplicationPart(presentationAssembly)
+            .AddApplicationPart(Presentation.AssemblyReference.Assembly)
             .ConfigureApiBehaviorOptions(options => options.Configure())
             .AddJsonOptions(options => options.Configure())
             .AddXmlSerializerFormatters();
@@ -23,6 +25,13 @@ public static class WebApplicationExtension
         /* Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle */
         builder.Services.AddEndpointsApiExplorer(); //
         builder.Services.AddSwaggerGen(options => options.Configure());
+
+        /* Add MediateR */
+        builder.Services.AddMediatR(Application.AssemblyReference.Assembly);
+
+        builder.Services.AddScoped<IPersonRepository, PeronRepository>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddDbContext<ApplicationDbContext>();
 
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>

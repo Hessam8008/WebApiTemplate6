@@ -5,7 +5,7 @@ using Domain.Primitives.Result;
 
 namespace Application.Persons.Commands.ChangeNation;
 
-public class ChangeNationCommandHandler : ICommandHandler<ChangeNationCommand, Result>
+public class ChangeNationCommandHandler : ICommandHandler<ChangeNationCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPersonRepository _personRepository;

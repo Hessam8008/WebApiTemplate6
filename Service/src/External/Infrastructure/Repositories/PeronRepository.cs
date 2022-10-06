@@ -13,8 +13,23 @@ public class PeronRepository : IPersonRepository
         _dbContext = dbContext;
     }
 
-    public async Task Insert(Person person)
+    public async Task InsertAsync(Person person)
     {
         await _dbContext.Set<Person>().AddAsync(person);
+    }
+
+    public Task<Person?> SelectAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateAsync(Person person)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteAsync(Guid id)
+    {
+        throw new NotImplementedException();
     }
 }
