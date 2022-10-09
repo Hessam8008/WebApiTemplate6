@@ -18,14 +18,16 @@ public static class DomainErrors
             return new Error("Record.Duplicate", $"Duplicate record found{forId}.");
         }
 
-        public static Error ValueIsInvalid()
+        public static Error ValueIsInvalid(string? name = null, string? value = null)
         {
-            return new Error("Value.IsInvalid", "Value is invalid.");
+            var forName = name == null ? "Value" : $"For {name} value";
+            var forValue = value == null ? " " : $" '{value}' ";
+            return new Error("Value.Invalid", $"{forName}{forValue}is invalid.");
         }
 
         public static Error ValueIsRequired()
         {
-            return new Error("Value.IsRequired", "Value is required.");
+            return new Error("Value.Required", "Value is required.");
         }
 
         public static Error InvalidLength(string? name = null)

@@ -8,7 +8,11 @@ namespace Domain.Entities;
 
 public sealed class Person : Entity
 {
-    protected Person(Guid id) : base(id)
+    protected Person()
+    {
+    }
+
+    private Person(Guid id) : base(id)
     {
     }
 

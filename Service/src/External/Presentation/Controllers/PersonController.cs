@@ -18,11 +18,12 @@ public class PersonController : ApiController
     }
 
     [HttpPost("Register")]
-    public async Task<IActionResult> RegisterPerson(CancellationToken cancellationToken)
+    public async Task<IActionResult> RegisterPerson(
+        [FromBody] CreatePersonCommand command,
+        CancellationToken cancellationToken)
     {
-        var command = new CreatePersonCommand("Hessam", "Hosseini", "faksfla@askdfla.com");
         var result = await Sender.Send(command, cancellationToken);
-        return result.IsSuccess ? Ok() : BadRequest(result.Error);
+        return result.IsSuccess ? Ok(result) : BadRequest(result.Error);
     }
 
 

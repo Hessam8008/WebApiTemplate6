@@ -129,14 +129,16 @@ public class Result
 
     public static Result Combine(params Result[] results)
     {
-        var errors =
-            (from result in results
-                where result.IsFailure
-                select result.Error).ToList();
+        var errors = results.Where(r => r.IsFailure).Select(r => r).ToList();
 
-        return errors.Any()
-            ? DomainErrors.General.MultiError(errors.ToArray())
-            : Success();
+        if (!errors.Any())
+            return Success();
+
+        if (errors.Count == 1)
+            return errors.First();
+
+        var k = errors.Select(x => x.Error).ToArray();
+        return DomainErrors.General.MultiError(k);
     }
 }
 

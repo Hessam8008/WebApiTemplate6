@@ -7,6 +7,8 @@ namespace Domain.ValueObjects;
 
 public class Email : ValueObject
 {
+    public const int MaxLength = 150;
+
     public string Value { get; }
 
 
@@ -23,11 +25,11 @@ public class Email : ValueObject
 
         email = email.Trim();
 
-        if (email.Length > 150)
+        if (email.Length > MaxLength)
             return DomainErrors.General.InvalidLength();
 
         if (Regex.IsMatch(email, @"^(.+)@(.+)$") == false)
-            return DomainErrors.General.ValueIsInvalid();
+            return DomainErrors.General.ValueIsInvalid(nameof(Email), email);
 
         return new Email(email);
     }

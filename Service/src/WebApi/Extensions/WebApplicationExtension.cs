@@ -1,7 +1,5 @@
-﻿using Domain.Abstractions;
+﻿using Application;
 using Infrastructure;
-using Infrastructure.Repositories;
-using MediatR;
 using Serilog;
 
 namespace WebApi.Extensions;
@@ -26,12 +24,9 @@ public static class WebApplicationExtension
         builder.Services.AddEndpointsApiExplorer(); //
         builder.Services.AddSwaggerGen(options => options.Configure());
 
-        /* Add MediateR */
-        builder.Services.AddMediatR(Application.AssemblyReference.Assembly);
+        builder.Services.AddApplication();
 
-        builder.Services.AddScoped<IPersonRepository, PeronRepository>();
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-        builder.Services.AddDbContext<ApplicationDbContext>();
+        builder.Services.AddInfrastructure(builder.Configuration);
 
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>
@@ -61,3 +56,5 @@ public static class WebApplicationExtension
         app.MapControllers();
     }
 }
+
+

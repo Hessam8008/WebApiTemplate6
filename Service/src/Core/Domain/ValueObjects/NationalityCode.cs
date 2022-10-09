@@ -7,6 +7,8 @@ namespace Domain.ValueObjects;
 
 public class NationalCode : ValueObject
 {
+    public const int Length = 10;
+
     private NationalCode(string value)
     {
         Value = value;
@@ -22,7 +24,7 @@ public class NationalCode : ValueObject
 
         value = value.Trim();
 
-        if (value.Length != 10)
+        if (value.Length != Length)
             return DomainErrors.Person.WrongLengthNationalCode;
 
         var regex = new Regex(@"\d{10}");

@@ -6,7 +6,7 @@ namespace Domain.ValueObjects;
 
 public sealed class LastName : ValueObject
 {
-    private const int MaxLength = 30;
+    public const int MaxLength = 30;
 
 
     private LastName(string value)
