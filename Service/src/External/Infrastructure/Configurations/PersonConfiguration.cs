@@ -31,7 +31,12 @@ internal class PersonConfiguration : IEntityTypeConfiguration<Person>
             .HasMaxLength(LastName.MaxLength)
             .IsRequired();
 
+        builder.Property(p => p.Nationality)
+            .HasMaxLength(32);
+
+
         builder.Property(p => p.BirthDate)
+            .HasColumnType("date")
             .HasConversion(p => p.ToDateTime(TimeOnly.MinValue), p => new DateOnly(p.Year, p.Month, p.Day));
     }
 }
