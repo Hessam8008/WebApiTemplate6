@@ -1,5 +1,6 @@
 ﻿using Domain.Abstractions;
 using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,23 +18,19 @@ public static class DependencyInjection
 
         services.AddScoped<IPersonRepository, PeronRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddDbContext<ApplicationDbContext>();
-        //services.AddDbContext<ApplicationDbContext>(option =>
-        // {option.UseSqlServer(options.ConnectionString);
-        /*
-         *,
-                sqlAction => sqlAction
-                    .EnableRetryOnFailure(options.MaxRetryCount)
-                    .CommandTimeout(options.CommandTimeOut))
-            .EnableDetailedErrors(options.EnableDetailedErrors)
-            .EnableSensitiveDataLogging(options.EnableSensitiveDataLogging)
-         *
-         
-    });*/
+        services.AddDbContext<ApplicationDbContext>(option =>
+        {
+            option.UseSqlServer(options.ConnectionString,
+                    sqlAction => sqlAction
+                        .EnableRetryOnFailure(options.MaxRetryCount)
+                        .CommandTimeout(options.CommandTimeOut))
+                .EnableDetailedErrors(options.EnableDetailedErrors)
+                .EnableSensitiveDataLogging(options.EnableSensitiveDataLogging);
+        });
         return services;
     }
 
-    public class DatabaseOptions
+    private class DatabaseOptions
     {
         public static string ConfigurationName = nameof(DatabaseOptions);
 
