@@ -1,4 +1,5 @@
 ﻿using Application.Persons.Commands.CreatePerson;
+using Application.Persons.Queries.GetPersonById;
 using Domain.Entities;
 using Domain.Primitives.Result;
 using Domain.ValueObjects;
@@ -22,10 +23,8 @@ public class PersonController : ApiController
         [FromBody] CreatePersonCommand command,
         CancellationToken cancellationToken)
     {
-        var result = await Sender.Send(command, cancellationToken);
-        return result.IsSuccess ? Ok(result) : BadRequest(result.Error);
+        return Output(await Sender.Send(command, cancellationToken));
     }
-
 
     private static Result<Person> CreatePerson()
     {
@@ -41,6 +40,14 @@ public class PersonController : ApiController
         var p = Person.Create(firstName, lastName, email);
         return Result.Success(p);
     }
+
+    [HttpGet("first")]
+    [ProducesResponseType(typeof(Result<PersonResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetPersonAsync(CancellationToken cancellationToken)
+    {
+        return Output(await Sender.Send(new GetPersonByIdQuery(Guid.Empty), cancellationToken));
+    }
+
 
     [HttpGet("SystemException")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]

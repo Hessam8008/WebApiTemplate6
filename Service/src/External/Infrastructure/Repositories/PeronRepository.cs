@@ -1,5 +1,6 @@
 ﻿using Domain.Abstractions;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -18,9 +19,9 @@ public class PeronRepository : IPersonRepository
         await _dbContext.Set<Person>().AddAsync(person);
     }
 
-    public Task<Person?> SelectAsync(Guid id)
+    public async Task<Person?> SelectAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Set<Person>().FirstOrDefaultAsync();
     }
 
     public Task UpdateAsync(Person person)

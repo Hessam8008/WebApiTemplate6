@@ -34,6 +34,10 @@ public class Email : ValueObject
         return new Email(email);
     }
 
+    public static implicit operator string(Email value)
+    {
+        return value.Value;
+    }
 
     protected override IEnumerable<object> GetAtomicValues()
     {

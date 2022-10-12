@@ -22,6 +22,6 @@ public sealed class GetPersonByIdQueryHandler : IQueryHandler<GetPersonByIdQuery
 
         return person is null
             ? Result.Failure<PersonResponse>(DomainErrors.General.RecordNotFound())
-            : new PersonResponse();
+            : new PersonResponse(person.Id, person.FirstName, person.LastName, person.Email);
     }
 }
