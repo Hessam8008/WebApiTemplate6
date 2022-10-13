@@ -1,11 +1,11 @@
 using System.Diagnostics;
-using Domain.Exceptions;
+using Domain.Primitives.Result;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WebApi.Filters;
 
-public class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
+public class HttpResponseResultWrapperFilter : IActionFilter, IOrderedFilter
 {
     public int Order => int.MaxValue - 10;
 
@@ -17,20 +17,25 @@ public class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
     {
         Debug.WriteLine($"Filter: {context.ActionDescriptor.DisplayName}");
 
-        if (context.Exception is null)
-        {
-            Debug.WriteLine("Filter: No exception.");
+        if (context.Exception is not null)
             return;
+
+        if (context.Result is not OkObjectResult {Value: Result result} objectResult)
+            return;
+
+        if (result.IsFailure)
+        {
+            context.Result = new ObjectResult(result.Error) {StatusCode = 499};
         }
-
-        if (context.Exception is not DomainException httpResponseException)
-            return;
-
-        context.Result = new ObjectResult(httpResponseException.Message)
+        else
         {
-            StatusCode = 500
-        };
+            object? obj = null;
+            var valueType = objectResult.Value.GetType();
 
-        context.ExceptionHandled = true;
+            if (valueType.IsGenericType && valueType.GetGenericTypeDefinition() == typeof(Result<>))
+                obj = valueType.GetProperty("Value")?.GetValue(objectResult.Value);
+
+            context.Result = new ObjectResult(obj) {StatusCode = 200};
+        }
     }
 }

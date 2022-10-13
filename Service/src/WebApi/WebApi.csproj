@@ -42,4 +42,8 @@
     <ProjectReference Include="..\External\Presentation\Presentation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middlewares\" />
+  </ItemGroup>
+
 </Project>

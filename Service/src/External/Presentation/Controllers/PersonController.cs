@@ -19,11 +19,12 @@ public class PersonController : ApiController
     }
 
     [HttpPost("Register")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> RegisterPerson(
         [FromBody] CreatePersonCommand command,
         CancellationToken cancellationToken)
     {
-        return Output(await Sender.Send(command, cancellationToken));
+        return CreatedAtAction("GetPerson", await Sender.Send(command, cancellationToken));
     }
 
     private static Result<Person> CreatePerson()
@@ -42,10 +43,10 @@ public class PersonController : ApiController
     }
 
     [HttpGet("first")]
-    [ProducesResponseType(typeof(Result<PersonResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PersonResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPersonAsync(CancellationToken cancellationToken)
     {
-        return Output(await Sender.Send(new GetPersonByIdQuery(Guid.Empty), cancellationToken));
+        return Ok(await Sender.Send(new GetPersonByIdQuery(Guid.Empty), cancellationToken));
     }
 
 
