@@ -20,7 +20,7 @@ public class HttpResponseResultWrapperFilter : IActionFilter, IOrderedFilter
         if (context.Exception is not null)
             return;
 
-        if (context.Result is not OkObjectResult {Value: Result result} objectResult)
+        if (context.Result is not ObjectResult {Value: Result result} objectResult)
             return;
 
         if (result.IsFailure)
@@ -35,7 +35,7 @@ public class HttpResponseResultWrapperFilter : IActionFilter, IOrderedFilter
             if (valueType.IsGenericType && valueType.GetGenericTypeDefinition() == typeof(Result<>))
                 obj = valueType.GetProperty("Value")?.GetValue(objectResult.Value);
 
-            context.Result = new ObjectResult(obj) {StatusCode = 200};
+            context.Result = new ObjectResult(obj) {StatusCode = objectResult.StatusCode};
         }
     }
 }

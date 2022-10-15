@@ -8,12 +8,10 @@ namespace Application.Persons.Commands.CreatePerson;
 
 public sealed class CreatePersonCommandHandler : ICommandHandler<CreatePersonCommand>
 {
-    private readonly IPersonRepository _personRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreatePersonCommandHandler(IPersonRepository personRepository, IUnitOfWork unitOfWork)
+    public CreatePersonCommandHandler(IUnitOfWork unitOfWork)
     {
-        _personRepository = personRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -27,7 +25,7 @@ public sealed class CreatePersonCommandHandler : ICommandHandler<CreatePersonCom
             return result;
 
         var person = Person.Create(firsName, lastName, email);
-        await _personRepository.InsertAsync(person);
+        await _unitOfWork.PersonRepository.InsertAsync(person);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }

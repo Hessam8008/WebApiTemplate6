@@ -1,21 +1,29 @@
 ﻿using Domain.Abstractions;
 
-namespace Infrastructure
+namespace Infrastructure;
+
+public sealed class UnitOfWork : IUnitOfWork
 {
-    public sealed class UnitOfWork : IUnitOfWork
+    private readonly ApplicationDbContext _applicationDbContext;
+
+    public UnitOfWork(ApplicationDbContext applicationDbContext, IPersonRepository personRepository)
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        _applicationDbContext = applicationDbContext;
+        PersonRepository = personRepository;
+    }
 
-        public UnitOfWork(ApplicationDbContext applicationDbContext)
-        {
-            _applicationDbContext = applicationDbContext;
-        }
+    public IPersonRepository PersonRepository { get; }
 
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            return await _applicationDbContext
-                .SaveChangesAsync(cancellationToken)
-                .ConfigureAwait(false);
-        }
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        await using var transaction = await _applicationDbContext.Database.BeginTransactionAsync(cancellationToken);
+
+        var result = await _applicationDbContext
+            .SaveChangesAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        await transaction.CommitAsync(cancellationToken);
+
+        return result;
     }
 }

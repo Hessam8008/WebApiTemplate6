@@ -20,7 +20,7 @@ public class PersonController : ApiController
 
     [HttpPost("Register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<IActionResult> RegisterPerson(
+    public async Task<IActionResult> RegisterPersonAsync(
         [FromBody] CreatePersonCommand command,
         CancellationToken cancellationToken)
     {
@@ -35,11 +35,10 @@ public class PersonController : ApiController
         var nationCode = NationalCode.Create("0946507768");
 
         var result = Result.Combine(firstName, lastName, email, nationCode);
-        if (result.IsFailure)
-            return Result.Failure<Person>(result.Error);
 
-        var p = Person.Create(firstName, lastName, email);
-        return Result.Success(p);
+        return result.IsFailure
+            ? Result.Failure<Person>(result.Error)
+            : Person.Create(firstName, lastName, email).ToResult();
     }
 
     [HttpGet("first")]
@@ -113,8 +112,10 @@ public class PersonController : ApiController
     [ProducesResponseType(StatusCodes.Status201Created)]
     public IActionResult Post([FromBody] string? data = "Hello world!")
     {
+        return BadRequest("No data available.");
+
         if (data == null)
-            return BadRequest();
+            return BadRequest("No data available.");
 
         return CreatedAtAction(nameof(GetById), new {id = DateTime.Now.Millisecond}, new {data});
     }

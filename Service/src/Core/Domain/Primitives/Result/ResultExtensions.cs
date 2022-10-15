@@ -68,4 +68,9 @@ public static class ResultExtensions
 
         return result.IsSuccess ? onSuccess() : onFailure(result.Error);
     }
+
+    public static Result<T> ToResult<T>(this T entity)
+    {
+        return Result.Success(entity);
+    }
 }
