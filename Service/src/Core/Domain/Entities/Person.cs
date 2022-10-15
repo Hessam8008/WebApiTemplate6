@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.DomainEvents;
+using Domain.Enums;
 using Domain.Errors;
 using Domain.Primitives;
 using Domain.Primitives.Result;
@@ -6,7 +7,7 @@ using Domain.ValueObjects;
 
 namespace Domain.Entities;
 
-public sealed class Person : Entity
+public sealed class Person : AggregateRoot
 {
     protected Person()
     {
@@ -25,6 +26,7 @@ public sealed class Person : Entity
     public Email Email { get; private set; }
     public DateTime CreateTime { get; private set; }
 
+    public bool Active { get; private set; }
 
     public Result ChangeNation(string newNation)
     {
@@ -66,7 +68,14 @@ public sealed class Person : Entity
             NationCode = NationalCode.Create("0946507767"),
             Nationality = "Germany",
             Email = email,
-            CreateTime = DateTime.Now
+            CreateTime = DateTime.Now,
+            Active = true
         };
+    }
+
+    public void Deavtive()
+    {
+        Active = false;
+        AddDomainEvent(new PersonDeactivatedDomainEvent(Id));
     }
 }
