@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Application.Persons.Events;
 
-public sealed class PersonDeactivatedDomainEventHandler : INotificationHandler<PersonDeactivatedDomainEvent>
+public sealed class PersonDeactivatedDomainEventHandler : INotificationHandler<PersonCreatedDomainEvent>
 {
-    public async Task Handle(PersonDeactivatedDomainEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(PersonCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
         // Send email
     }

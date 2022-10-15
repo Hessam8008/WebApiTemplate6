@@ -14,7 +14,27 @@
         }
 
 
-        protected void AddEvent(IDomainEvent domainEvent)
+        /// <summary>
+        ///     Gets the domain events. This collection is readonly.
+        /// </summary>
+        public IReadOnlyCollection<IDomainEvent> GetDomainEvents()
+        {
+            return _domainEvents.AsReadOnly().ToList();
+        }
+
+        /// <summary>
+        ///     Clears all the domain events from the entity.
+        /// </summary>
+        public void ClearDomainEvents()
+        {
+            _domainEvents.Clear();
+        }
+
+        /// <summary>
+        ///     Adds the specified domain event to the entity.
+        /// </summary>
+        /// <param name="domainEvent">The domain event.</param>
+        protected void AddDomainEvent(IDomainEvent domainEvent)
         {
             _domainEvents.Add(domainEvent);
         }

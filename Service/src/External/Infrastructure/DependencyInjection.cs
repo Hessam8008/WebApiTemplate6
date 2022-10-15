@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using Infrastructure.Interceptors;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,14 +19,18 @@ public static class DependencyInjection
 
         services.AddScoped<IPersonRepository, PeronRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddDbContext<ApplicationDbContext>(option =>
+        services.AddSingleton<DomainEventsToOutboxInterceptor>();
+        services.AddDbContext<ApplicationDbContext>((sp, option) =>
         {
+            var interceptor = sp.GetService<DomainEventsToOutboxInterceptor>();
+
             option.UseSqlServer(options.ConnectionString,
                     sqlAction => sqlAction
                         .EnableRetryOnFailure(options.MaxRetryCount)
                         .CommandTimeout(options.CommandTimeOut))
                 .EnableDetailedErrors(options.EnableDetailedErrors)
-                .EnableSensitiveDataLogging(options.EnableSensitiveDataLogging);
+                .EnableSensitiveDataLogging(options.EnableSensitiveDataLogging)
+                .AddInterceptors(interceptor);
         });
         return services;
     }

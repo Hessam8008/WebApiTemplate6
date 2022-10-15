@@ -59,7 +59,7 @@ public sealed class Person : AggregateRoot
 
     public static Person Create(FirstName firstName, LastName lastName, Email email)
     {
-        return new Person(Guid.NewGuid())
+        var person = new Person(Guid.NewGuid())
         {
             FirstName = firstName,
             LastName = lastName,
@@ -71,11 +71,7 @@ public sealed class Person : AggregateRoot
             CreateTime = DateTime.Now,
             Active = true
         };
-    }
-
-    public void Deavtive()
-    {
-        Active = false;
-        AddDomainEvent(new PersonDeactivatedDomainEvent(Id));
+        person.AddDomainEvent(new PersonCreatedDomainEvent(person.Id));
+        return person;
     }
 }

@@ -1,11 +1,7 @@
-﻿using Domain.Primitives.Events;
-
-namespace Domain.Primitives;
+﻿namespace Domain.Primitives;
 
 public abstract class Entity : IEquatable<Entity>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="Entity" /> class.
     /// </summary>
@@ -29,12 +25,6 @@ public abstract class Entity : IEquatable<Entity>
     ///     Gets the entity identifier.
     /// </summary>
     public Guid Id { get; }
-
-    /// <summary>
-    ///     Gets the domain events. This collection is readonly.
-    /// </summary>
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
-
 
     public static bool operator ==(Entity? first, Entity? second)
     {
@@ -71,22 +61,5 @@ public abstract class Entity : IEquatable<Entity>
     public override int GetHashCode()
     {
         return Id.GetHashCode() * 41;
-    }
-
-    /// <summary>
-    ///     Clears all the domain events from the entity.
-    /// </summary>
-    public void ClearDomainEvents()
-    {
-        _domainEvents.Clear();
-    }
-
-    /// <summary>
-    ///     Adds the specified domain event to the entity.
-    /// </summary>
-    /// <param name="domainEvent">The domain event.</param>
-    protected void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        _domainEvents.Add(domainEvent);
     }
 }

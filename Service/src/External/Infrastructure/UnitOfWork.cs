@@ -16,13 +16,13 @@ public sealed class UnitOfWork : IUnitOfWork
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await using var transaction = await _applicationDbContext.Database.BeginTransactionAsync(cancellationToken);
+        //await using var transaction = await _applicationDbContext.Database.BeginTransactionAsync(cancellationToken);
 
         var result = await _applicationDbContext
-            .SaveChangesAsync(cancellationToken)
-            .ConfigureAwait(false);
+                .SaveChangesAsync(cancellationToken)
+            ;
 
-        await transaction.CommitAsync(cancellationToken);
+        //await transaction.CommitAsync(cancellationToken);
 
         return result;
     }
