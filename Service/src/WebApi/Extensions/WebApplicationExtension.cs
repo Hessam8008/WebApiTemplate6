@@ -1,5 +1,6 @@
 ﻿using Application;
 using Persistence;
+using Publisher;
 using Serilog;
 
 namespace WebApi.Extensions;
@@ -26,7 +27,9 @@ public static class WebApplicationExtension
 
         builder.Services.AddApplication();
 
-        builder.Services.AddInfrastructure(builder.Configuration);
+        builder.Services.AddPersistence(builder.Configuration);
+
+        builder.Services.AddOutboxMessagePublisher();
 
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>

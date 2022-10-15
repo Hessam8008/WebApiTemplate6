@@ -40,6 +40,7 @@
     <ProjectReference Include="..\Core\Domain\Domain.csproj" />
     <ProjectReference Include="..\External\Persistence\Persistence.csproj" />
     <ProjectReference Include="..\External\Presentation\Presentation.csproj" />
+    <ProjectReference Include="..\External\Publisher\Publisher.csproj" />
   </ItemGroup>
 
   <ItemGroup>
