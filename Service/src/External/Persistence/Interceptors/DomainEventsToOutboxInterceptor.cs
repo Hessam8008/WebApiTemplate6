@@ -1,9 +1,9 @@
 ﻿using Domain.Primitives;
-using Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Newtonsoft.Json;
+using Persistence.Outbox;
 
-namespace Infrastructure.Interceptors;
+namespace Persistence.Interceptors;
 
 public sealed class DomainEventsToOutboxInterceptor : SaveChangesInterceptor
 {

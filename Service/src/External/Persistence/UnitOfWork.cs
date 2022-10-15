@@ -1,6 +1,6 @@
 ﻿using Domain.Abstractions;
 
-namespace Infrastructure;
+namespace Persistence;
 
 public sealed class UnitOfWork : IUnitOfWork
 {

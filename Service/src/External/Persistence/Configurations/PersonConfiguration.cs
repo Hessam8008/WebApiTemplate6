@@ -3,7 +3,7 @@ using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Configurations;
+namespace Persistence.Configurations;
 
 internal class PersonConfiguration : IEntityTypeConfiguration<Person>
 {

@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Outbox;
+﻿namespace Persistence.Outbox;
 
 public sealed class OutboxMessage
 {

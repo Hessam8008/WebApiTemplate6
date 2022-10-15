@@ -6,14 +6,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Persistence;
 
 #nullable disable
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221015084700_AddActiveColumnToPerson")]
-    partial class AddActiveColumnToPerson
+    [Migration("20221011084407_ChangeBirthdateTypeToDate")]
+    partial class ChangeBirthdateTypeToDate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,9 +30,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("date");
@@ -63,8 +61,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Nationality")
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

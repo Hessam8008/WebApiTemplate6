@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories;
+namespace Persistence.Repositories;
 
 public class PeronRepository : IPersonRepository
 {

@@ -1,5 +1,5 @@
 ﻿using Application;
-using Infrastructure;
+using Persistence;
 using Serilog;
 
 namespace WebApi.Extensions;

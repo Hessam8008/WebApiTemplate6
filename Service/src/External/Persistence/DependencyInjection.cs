@@ -1,11 +1,11 @@
 ﻿using Domain.Abstractions;
-using Infrastructure.Interceptors;
-using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence.Interceptors;
+using Persistence.Repositories;
 
-namespace Infrastructure;
+namespace Persistence;
 
 public static class DependencyInjection
 {

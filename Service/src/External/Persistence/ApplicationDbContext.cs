@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using Domain.Entities;
-using Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Persistence.Outbox;
 
-namespace Infrastructure;
+namespace Persistence;
 
 public class ApplicationDbContext : DbContext
 {

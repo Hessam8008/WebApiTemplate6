@@ -82,7 +82,7 @@ public class ArchitectureTests
     public void Infrastructure_Should_Not_HaveDependencyOnOtherProjects()
     {
         // Arrange
-        var assembly = typeof(Infrastructure.AssemblyReference).Assembly;
+        var assembly = typeof(Persistence.AssemblyReference).Assembly;
         var otherProjects = new[]
         {
             PresentationNamespace,
