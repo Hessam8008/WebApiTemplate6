@@ -8,9 +8,9 @@ namespace Persistence;
 
 public class ApplicationDbContext : DbContext
 {
-    public DbSet<Person> Persons { get; set; }
+    public DbSet<Person>? Persons { get; set; }
 
-    public DbSet<OutboxMessage> OutboxMessages { get; set; }
+    public DbSet<OutboxMessage>? OutboxMessages { get; set; }
 
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
