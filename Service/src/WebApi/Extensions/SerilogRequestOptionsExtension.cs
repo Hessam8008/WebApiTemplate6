@@ -8,8 +8,6 @@ public static class SerilogRequestOptionsExtension
 {
     public static void Configuration(this RequestLoggingOptions options)
     {
-        //options.Logger.BindMessageTemplate("", )
-
         // Customize the message template
         options.MessageTemplate = "Handled {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
 
