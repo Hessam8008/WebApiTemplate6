@@ -32,7 +32,7 @@ public sealed class Error : ValueObject
     public string Message { get; }
 
 
-    public static implicit operator string(Error error)
+    public static implicit operator string(Error? error)
     {
         return error?.Code ?? string.Empty;
     }

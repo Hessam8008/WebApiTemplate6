@@ -14,7 +14,7 @@ public class Result<TValue> : Result
     /// <param name="value">The result value.</param>
     /// <param name="isSuccess">The flag indicating if the result is successful.</param>
     /// <param name="error">The error.</param>
-    protected internal Result(TValue value, bool isSuccess, Error error)
+    protected internal Result(TValue value, bool isSuccess, Error? error)
         : base(isSuccess, error)
     {
         _value = value;

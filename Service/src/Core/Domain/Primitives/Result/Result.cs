@@ -12,8 +12,9 @@ public class Result
     /// </summary>
     /// <param name="isSuccess">The flag indicating if the result is successful.</param>
     /// <param name="error">The error.</param>
-    protected Result(bool isSuccess, Error error)
+    protected Result(bool isSuccess, Error? error)
     {
+        error ??= Error.None;
         switch (isSuccess)
         {
             case true when error != Error.None:
@@ -74,7 +75,7 @@ public class Result
     /// <param name="value">The result value.</param>
     /// <param name="error">The error in case the value is null.</param>
     /// <returns>A new instance of <see cref="Result{TValue}" /> with the specified value or an error.</returns>
-    public static Result<TValue> Create<TValue>(TValue value, Error error)
+    public static Result<TValue> Create<TValue>(TValue? value, Error error)
         where TValue : class
     {
         return value is null ? Failure<TValue>(error) : Success(value);
@@ -85,8 +86,9 @@ public class Result
     /// </summary>
     /// <param name="error">The error.</param>
     /// <returns>A new instance of <see cref="Result" /> with the specified error and failure flag set.</returns>
-    public static Result Failure(Error error)
+    public static Result Failure(Error? error)
     {
+        error ??= Error.None;
         return new Result(false, error);
     }
 
@@ -100,8 +102,9 @@ public class Result
     ///     We're purposefully ignoring the nullable assignment here because the API will never allow it to be accessed.
     ///     The value is accessed through a method that will throw an exception if the result is a failure result.
     /// </remarks>
-    public static Result<TValue> Failure<TValue>(Error error)
+    public static Result<TValue> Failure<TValue>(Error? error)
     {
+        error ??= Error.None;
         return new Result<TValue>(default!, false, error);
     }
 
@@ -138,7 +141,7 @@ public class Result
             return errors.First();
 
         var k = errors.Select(x => x.Error).ToArray();
-        return DomainErrors.General.MultiError(k);
+        return DomainErrors.General.MultiError(k!);
     }
 }
 
