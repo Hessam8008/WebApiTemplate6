@@ -26,7 +26,10 @@ internal sealed class OutboxMessagePublisher : IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        var messages = await _dbContext.Set<OutboxMessage>().Where(m => m.ProcessedOnUtc == null).Take(20)
+        var messages = await _dbContext.Set<OutboxMessage>()
+            .Where(m => m.ProcessedOnUtc == null)
+            .OrderBy(x => x.OccurredOnUtc)
+            .Take(20)
             .ToListAsync(context.CancellationToken);
 
         if (!messages.Any())
