@@ -45,7 +45,7 @@ public class Result
     /// <summary>
     ///     Gets the error.
     /// </summary>
-    public Error Error { get; }
+    public Error? Error { get; }
 
     /// <summary>
     ///     Returns a success <see cref="Result" />.
