@@ -8,6 +8,8 @@ public static class SerilogRequestOptionsExtension
 {
     public static void Configuration(this RequestLoggingOptions options)
     {
+        //options.Logger.BindMessageTemplate("", )
+
         // Customize the message template
         options.MessageTemplate = "Handled {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
 
@@ -17,6 +19,9 @@ public static class SerilogRequestOptionsExtension
         // Attach additional properties to the request completion event
         options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
         {
+            if (httpContext.Request.QueryString.HasValue)
+                diagnosticContext.Set("QueryString", httpContext.Request.QueryString.Value);
+
             diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
             diagnosticContext.Set("RequestProtocol", httpContext.Request.Protocol);
             diagnosticContext.Set("UserName", httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
