@@ -1,29 +1,27 @@
 ﻿using Domain.Primitives;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Persistence;
 using Persistence.Outbox;
 using Quartz;
+using Serilog;
 
 namespace Publisher;
 
 [DisallowConcurrentExecution]
-public class OutboxMessagePublisher : IJob
+// ReSharper disable once ClassNeverInstantiated.Global
+internal sealed class OutboxMessagePublisher : IJob
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IPublisher _publisher;
-    private readonly ILogger<OutboxMessagePublisher> _logger;
 
     public OutboxMessagePublisher(
         ApplicationDbContext dbContext,
-        IPublisher publisher,
-        ILogger<OutboxMessagePublisher> logger)
+        IPublisher publisher)
     {
         _dbContext = dbContext;
         _publisher = publisher;
-        _logger = logger;
     }
 
     public async Task Execute(IJobExecutionContext context)
@@ -45,7 +43,10 @@ public class OutboxMessagePublisher : IJob
 
             if (domainEvent is null)
             {
-                _logger.LogError($"Event '{message.Type}' cannot be deserialized.", message);
+                var eventType = message.Type;
+                Log.ForContext<OutboxMessagePublisher>()
+                    .ForContext("event", message)
+                    .Error("Event type '{eventType}' cannot be deserialized.", eventType);
                 continue;
             }
 
