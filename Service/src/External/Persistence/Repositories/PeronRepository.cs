@@ -21,7 +21,7 @@ public class PeronRepository : IPersonRepository
 
     public async Task<Person?> SelectAsync(Guid id)
     {
-        return await _dbContext.Set<Person>().FirstOrDefaultAsync();
+        return await _dbContext.Set<Person>().OrderBy(x => x.Id).FirstOrDefaultAsync();
     }
 
     public Task UpdateAsync(Person person)

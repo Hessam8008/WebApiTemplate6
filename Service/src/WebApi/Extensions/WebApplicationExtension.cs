@@ -18,8 +18,7 @@ public static class WebApplicationExtension
             .AddControllers(options => options.Configure())
             .AddApplicationPart(Presentation.AssemblyReference.Assembly)
             .ConfigureApiBehaviorOptions(options => options.Configure())
-            .AddJsonOptions(options => options.Configure())
-            .AddXmlSerializerFormatters();
+            .AddJsonOptions(options => options.Configure());
 
         /* Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle */
         builder.Services.AddEndpointsApiExplorer(); //

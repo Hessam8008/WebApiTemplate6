@@ -17,7 +17,7 @@ public sealed class GetPersonByIdQueryHandler : IQueryHandler<GetPersonByIdQuery
 
     public async Task<Result<PersonResponse>> Handle(GetPersonByIdQuery query, CancellationToken cancellationToken)
     {
-        const string sql = @"Select * from dbo.Person where Id = @Id";
+        //const string sql = @"Select * from dbo.Person where Id = @Id";
         var person = await _repository.SelectAsync(query.Id);
 
         return person is null
