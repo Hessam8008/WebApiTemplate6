@@ -35,6 +35,8 @@ public static class WebApplicationExtension
         builder.Services.AddHealthChecks()
             .AddSqlConnectionHealthCheck();
 
+        builder.Services.AddHealthChecksUI().AddInMemoryStorage();
+
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>
             lc.ReadFrom.Configuration(ctx.Configuration));
@@ -65,6 +67,9 @@ public static class WebApplicationExtension
             Predicate = _ => true,
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
         });
+
+        app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
+
 
         app.MapControllers();
     }
