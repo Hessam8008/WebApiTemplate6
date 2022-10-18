@@ -12,9 +12,9 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services,
         ConfigurationManager configuration)
     {
-        var options = configuration
-            .GetSection(DatabaseOptions.ConfigurationName)
-            .Get<DatabaseOptions>();
+        DatabaseOptions.SetConfiguration(configuration);
+
+        var options = DatabaseOptions.GetInstance();
 
 
         services.AddScoped<IPersonRepository, PeronRepository>();
@@ -33,16 +33,5 @@ public static class DependencyInjection
                 .AddInterceptors(interceptor);
         });
         return services;
-    }
-
-    private class DatabaseOptions
-    {
-        public static string ConfigurationName = nameof(DatabaseOptions);
-
-        public string ConnectionString { get; set; } = string.Empty;
-        public int MaxRetryCount { get; set; }
-        public int CommandTimeOut { get; set; }
-        public bool EnableDetailedErrors { get; set; }
-        public bool EnableSensitiveDataLogging { get; set; }
     }
 }

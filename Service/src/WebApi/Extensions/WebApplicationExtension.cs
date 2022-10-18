@@ -1,4 +1,6 @@
 ﻿using Application;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Persistence;
 using Publisher;
 using Serilog;
@@ -30,6 +32,9 @@ public static class WebApplicationExtension
 
         builder.Services.AddOutboxMessagePublisher();
 
+        builder.Services.AddHealthChecks()
+            .AddSqlConnectionHealthCheck();
+
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>
             lc.ReadFrom.Configuration(ctx.Configuration));
@@ -54,6 +59,12 @@ public static class WebApplicationExtension
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+
+        app.MapHealthChecks("/hc", new HealthCheckOptions
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
 
         app.MapControllers();
     }
