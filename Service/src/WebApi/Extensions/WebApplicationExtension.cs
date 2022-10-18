@@ -1,5 +1,6 @@
 ﻿using Application;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Persistence;
 using Publisher;
@@ -24,7 +25,7 @@ public static class WebApplicationExtension
 
         /* Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle */
         builder.Services.AddEndpointsApiExplorer(); //
-        builder.Services.AddSwaggerGen(options => options.Configure());
+        builder.Services.AddSwaggerGen(options => options.Configure(builder.Configuration));
 
         builder.Services.AddApplication();
 
@@ -35,7 +36,15 @@ public static class WebApplicationExtension
         builder.Services.AddHealthChecks()
             .AddSqlConnectionHealthCheck();
 
-        builder.Services.AddHealthChecksUI().AddInMemoryStorage();
+        builder.Services.AddHealthChecksUI()
+            .AddInMemoryStorage();
+
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
+                options => options.Configure());
+
+        builder.Services.AddAuthorization(options => options.Configure());
 
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>
@@ -60,6 +69,8 @@ public static class WebApplicationExtension
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
+
         app.UseAuthorization();
 
         app.MapHealthChecks("/hc", new HealthCheckOptions
@@ -70,9 +81,6 @@ public static class WebApplicationExtension
 
         app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
 
-
         app.MapControllers();
     }
 }
-
-

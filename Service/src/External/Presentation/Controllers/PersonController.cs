@@ -18,6 +18,12 @@ public class PersonController : ApiController
     {
     }
 
+    /// <summary>
+    ///     Registers the person asynchronous.
+    /// </summary>
+    /// <param name="command">The command.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns></returns>
     [HttpPost("Register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> RegisterPersonAsync(
