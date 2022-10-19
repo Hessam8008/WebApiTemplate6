@@ -24,7 +24,19 @@ internal static class SwaggerOptionsExtension
             Type = SecuritySchemeType.OAuth2,
             Flows = new OpenApiOAuthFlows
             {
-                AuthorizationCode = new OpenApiOAuthFlow
+                /* ► Note:  Grant types list cannot contain both
+                 *          implicit and authorization_code
+                 -------------------------------------------------*/
+                /* For 'authorization_code' uncomment below lines */
+                /*AuthorizationCode = new OpenApiOAuthFlow
+                {
+                    AuthorizationUrl = new Uri(config.OAuth2.AuthorizationUrl),
+                    TokenUrl = new Uri(config.OAuth2.TokenUrl),
+                    Scopes = config.OAuth2.Scopes
+                }
+                */
+                /* For 'implicit' use the below code */
+                Implicit = new OpenApiOAuthFlow
                 {
                     AuthorizationUrl = new Uri(config.OAuth2.AuthorizationUrl),
                     TokenUrl = new Uri(config.OAuth2.TokenUrl),
