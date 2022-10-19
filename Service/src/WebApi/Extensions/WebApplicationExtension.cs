@@ -60,7 +60,7 @@ public static class WebApplicationExtension
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI(options => options.Configure());
+            app.UseSwaggerUI(options => options.Configure(app.Configuration));
         }
 
         app.UseExceptionHandler("/error");

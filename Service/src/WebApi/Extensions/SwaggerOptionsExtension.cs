@@ -8,15 +8,15 @@ internal static class SwaggerOptionsExtension
 {
     public static void Configure(this SwaggerGenOptions options, IConfiguration configuration)
     {
-        var swaggerConfig = configuration.GetSection(SwaggerConfig.ConfigSection).Get<SwaggerConfig>();
+        var config = SwaggerConfig.GetInstance(configuration);
 
         options.UseDateOnlyTimeOnlyStringConverters();
 
-        options.SwaggerDoc("v1", new OpenApiInfo
+        options.SwaggerDoc(config.Doc.Version, new OpenApiInfo
         {
-            Version = swaggerConfig.Doc.Version,
-            Title = "Web API",
-            Description = "API services."
+            Version = config.Doc.Version,
+            Title = config.Doc.Title,
+            Description = config.Doc.Description
         });
 
         options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -26,12 +26,9 @@ internal static class SwaggerOptionsExtension
             {
                 AuthorizationCode = new OpenApiOAuthFlow
                 {
-                    AuthorizationUrl = new Uri("https://idp.bxbinv.ir/connect/authorize"),
-                    TokenUrl = new Uri("https://idp.bxbinv.ir/connect/token"),
-                    Scopes = new Dictionary<string, string>
-                    {
-                        {"webApi", "Web API"}
-                    }
+                    AuthorizationUrl = new Uri(config.OAuth2.AuthorizationUrl),
+                    TokenUrl = new Uri(config.OAuth2.TokenUrl),
+                    Scopes = config.OAuth2.Scopes
                 }
             }
         });
@@ -43,7 +40,7 @@ internal static class SwaggerOptionsExtension
                 {
                     Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "oauth2"}
                 },
-                new[] {"webApi"}
+                config.OAuth2.ScopesArray.ToList()
             }
         });
 
@@ -51,45 +48,69 @@ internal static class SwaggerOptionsExtension
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     }
 
-    public static void Configure(this SwaggerUIOptions options)
+    public static void Configure(this SwaggerUIOptions options, IConfiguration configuration)
     {
+        var config = SwaggerConfig.GetInstance(configuration);
+
         options.DefaultModelsExpandDepth(-1);
-        options.OAuthUsePkce();
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = string.Empty;
+        if (config.OAuth2.UsePKCE) options.OAuthUsePkce();
+        options.SwaggerEndpoint(config.Doc.JsonEndpoint, config.Doc.Version);
+        options.RoutePrefix = config.Doc.RoutePrefix;
         options.OAuthConfigObject = new OAuthConfigObject
         {
-            ClientId = "trader_swagger",
-            Scopes = new[] {"traderApi"},
-            AppName = "Swagger for Traders service",
-            UsePkceWithAuthorizationCodeGrant = true
+            ClientId = config.OAuth2.ClientId,
+            Scopes = config.OAuth2.ScopesArray,
+            AppName = config.Doc.Title,
+            UsePkceWithAuthorizationCodeGrant = config.OAuth2.UsePKCE
         };
     }
 
-    private class SwaggerConfig
-    {
-        public const string ConfigSection = "Swagger";
+    #region Configuration objects
 
-        public Doc Doc { get; set; }
+    private sealed record SwaggerConfig
+    {
+        private const string ConfigSection = "Swagger";
+        private static SwaggerConfig? _singleton;
 
         public OAuth2 OAuth2 { get; set; }
+
+        public Document Doc { get; set; }
+
+        public static SwaggerConfig GetInstance(IConfiguration configuration)
+        {
+            return _singleton ??= configuration.GetSection(ConfigSection).Get<SwaggerConfig>();
+        }
     }
 
-    private class Doc
+    private sealed record Document
     {
         public string Version { get; set; }
 
         public string Title { get; set; }
 
         public string Description { get; set; }
+
+        public string RoutePrefix { get; set; }
+
+        public string JsonEndpoint { get; set; }
     }
 
-    private class OAuth2
+    private sealed record OAuth2
     {
         public string AuthorizationUrl { get; set; }
 
         public string TokenUrl { get; set; }
 
+        public string ClientId { get; set; }
+
+        public string SecretKey { get; set; }
+
+        public bool UsePKCE { get; set; }
+
         public Dictionary<string, string> Scopes { get; set; }
+
+        public IEnumerable<string> ScopesArray => Scopes.Keys.ToArray();
     }
+
+    #endregion
 }

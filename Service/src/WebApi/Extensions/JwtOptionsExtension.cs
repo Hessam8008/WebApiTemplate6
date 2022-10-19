@@ -7,11 +7,11 @@ internal static class JwtOptionsExtension
 {
     public static void Configure(this JwtBearerOptions options)
     {
-        options.Authority = "https://idp.golrizpaper.com";
+        options.Authority = "http://10.10.1.103:8300";
         options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidAudience = "",
             ValidateIssuer = false,
             ValidateAudience = false
         };
