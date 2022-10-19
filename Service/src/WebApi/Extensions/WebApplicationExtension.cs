@@ -1,9 +1,5 @@
 ﻿using Application;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Persistence;
-using Publisher;
 using Serilog;
 
 namespace WebApi.Extensions;
@@ -24,27 +20,28 @@ public static class WebApplicationExtension
             .AddJsonOptions(options => options.Configure());
 
         /* Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle */
-        builder.Services.AddEndpointsApiExplorer(); //
-        builder.Services.AddSwaggerGen(options => options.Configure(builder.Configuration));
+        builder.Services.AddEndpointsApiExplorer();
+
+        builder.Services.AddSwaggerGen(options => options.Configure());
 
         builder.Services.AddApplication();
 
         builder.Services.AddPersistence(builder.Configuration);
 
-        builder.Services.AddOutboxMessagePublisher();
+        //builder.Services.AddOutboxMessagePublisher();
 
-        builder.Services.AddHealthChecks()
-            .AddSqlConnectionHealthCheck();
+        //builder.Services.AddHealthChecks()
+        //    .AddSqlConnectionHealthCheck();
 
-        builder.Services.AddHealthChecksUI()
-            .AddInMemoryStorage();
+        //builder.Services.AddHealthChecksUI()
+        //    .AddInMemoryStorage();
 
 
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-                options => options.Configure());
+        //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
+        //        options => options.Configure());
 
-        builder.Services.AddAuthorization(options => options.Configure());
+        //builder.Services.AddAuthorization(options => options.Configure());
 
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>
@@ -67,19 +64,19 @@ public static class WebApplicationExtension
 
         app.UseHsts();
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
-        app.UseAuthentication();
+        //app.UseAuthentication();
 
-        app.UseAuthorization();
+        //app.UseAuthorization();
 
-        app.MapHealthChecks("/hc", new HealthCheckOptions
-        {
-            Predicate = _ => true,
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        });
+        //app.MapHealthChecks("/hc", new HealthCheckOptions
+        //{
+        //    Predicate = _ => true,
+        //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        //});
 
-        app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
+        //app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
 
         app.MapControllers();
     }

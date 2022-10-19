@@ -6,15 +6,13 @@ namespace WebApi.Extensions;
 
 internal static class SwaggerOptionsExtension
 {
-    public static void Configure(this SwaggerGenOptions options, IConfiguration configuration)
+    public static void Configure(this SwaggerGenOptions options)
     {
-        var swaggerConfig = configuration.GetSection(SwaggerConfig.ConfigSection).Get<SwaggerConfig>();
-
         options.UseDateOnlyTimeOnlyStringConverters();
 
         options.SwaggerDoc("v1", new OpenApiInfo
         {
-            Version = swaggerConfig.Doc.Version,
+            Version = "v1",
             Title = "Web API",
             Description = "API services."
         });
@@ -56,7 +54,7 @@ internal static class SwaggerOptionsExtension
         options.DefaultModelsExpandDepth(-1);
         options.OAuthUsePkce();
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = string.Empty;
+        options.RoutePrefix = "";
         options.OAuthConfigObject = new OAuthConfigObject
         {
             ClientId = "trader_swagger",
@@ -64,32 +62,5 @@ internal static class SwaggerOptionsExtension
             AppName = "Swagger for Traders service",
             UsePkceWithAuthorizationCodeGrant = true
         };
-    }
-
-    private class SwaggerConfig
-    {
-        public const string ConfigSection = "Swagger";
-
-        public Doc Doc { get; set; }
-
-        public OAuth2 OAuth2 { get; set; }
-    }
-
-    private class Doc
-    {
-        public string Version { get; set; }
-
-        public string Title { get; set; }
-
-        public string Description { get; set; }
-    }
-
-    private class OAuth2
-    {
-        public string AuthorizationUrl { get; set; }
-
-        public string TokenUrl { get; set; }
-
-        public Dictionary<string, string> Scopes { get; set; }
     }
 }
