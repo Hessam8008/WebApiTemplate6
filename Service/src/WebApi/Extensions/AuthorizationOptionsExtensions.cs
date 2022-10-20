@@ -9,6 +9,7 @@ internal static class AuthorizationOptionsExtensions
         options.AddPolicy("admin", p =>
         {
             p.RequireAuthenticatedUser();
+            p.RequireRole("admin");
             p.RequireClaim("role", "admin");
         });
     }

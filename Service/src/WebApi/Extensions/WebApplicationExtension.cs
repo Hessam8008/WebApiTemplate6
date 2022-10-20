@@ -46,6 +46,7 @@ public static class WebApplicationExtension
 
         builder.Services.AddAuthorization(options => options.Configure());
 
+
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>
             lc.ReadFrom.Configuration(ctx.Configuration));
@@ -81,6 +82,7 @@ public static class WebApplicationExtension
 
         app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
 
-        app.MapControllers();
+        app.MapControllers()
+            .RequireAuthorization();
     }
 }

@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Primitives.Result;
 using Domain.ValueObjects;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Abstractions;
@@ -48,6 +49,7 @@ public class PersonController : ApiController
     }
 
     [HttpGet("first")]
+    [Authorize(Policy = "admin")]
     [ProducesResponseType(typeof(PersonResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPersonAsync(CancellationToken cancellationToken)
     {
@@ -94,6 +96,7 @@ public class PersonController : ApiController
     }
 
     [HttpGet("{id:int}")]
+    [Authorize(Policy = "user")]
     [ProducesResponseType(typeof(PersonDto), StatusCodes.Status200OK)]
     public IActionResult GetById(int id = 258)
     {
