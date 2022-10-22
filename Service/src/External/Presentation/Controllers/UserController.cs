@@ -5,7 +5,10 @@ using Presentation.Abstractions;
 namespace Presentation.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[ApiVersion("2.0")]
+//[Route("api/v{version:apiVersion}/[controller]")]
+[Route("")]
 public class UserController : ApiController
 {
     public UserController(ISender sender) : base(sender)
@@ -18,7 +21,7 @@ public class UserController : ApiController
     {
         var dic = new
         {
-            User.Identity.Name,
+            User.Identity?.Name,
             Claims = User.Claims.Select(x => new {x.Type, x.Value, x.ValueType})
         };
 

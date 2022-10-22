@@ -1,37 +1,37 @@
 ﻿using Domain.Primitives;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Presentation.Controllers;
 using WebApi.Filters;
 
-namespace WebApi.Extensions;
+namespace WebApi.Configuration;
 
-public static class MvcOptionsExtension
+public class ConfigureMvcOptions : IConfigureNamedOptions<MvcOptions>
 {
-    public static void Configure(this MvcOptions options)
+    public void Configure(MvcOptions options)
     {
-        options.AddStatusCodesFilters();
-        options.AddTypeConvertors();
-    }
+        options.Conventions.Add(
+            new RoutePrefixConvention(new RouteAttribute("api/v{version:apiVersion}/[controller]")));
 
-    private static void AddStatusCodesFilters(this MvcOptions options)
-    {
         // Add filters
-
         options.Filters.Add<HttpResponseResultWrapperFilter>(); // For Result object
 
         // Add response types
-        //options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status403Forbidden));
-        //options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status401Unauthorized));
+        options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status403Forbidden));
+        options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status401Unauthorized));
         //options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status400BadRequest));
         //options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status404NotFound));
         options.Filters.Add(new ProducesResponseTypeAttribute(typeof(Error),
             ExtraStatusCodes.Status499DomainError));
         options.Filters.Add(new ProducesResponseTypeAttribute(typeof(HttpExceptionResponse),
             StatusCodes.Status500InternalServerError));
+
+        // Add type convertor
+        options.UseDateOnlyTimeOnlyStringConverters();
     }
 
-    private static void AddTypeConvertors(this MvcOptions options)
+    public void Configure(string name, MvcOptions options)
     {
-        options.UseDateOnlyTimeOnlyStringConverters();
+        Configure(options);
     }
 }

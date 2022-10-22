@@ -12,7 +12,9 @@ using Presentation.Abstractions;
 namespace Presentation.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("")]
+//[Route("api/v{version:apiVersion}/[controller]")]
 public class PersonController : ApiController
 {
     public PersonController(ISender sender) : base(sender)
@@ -49,7 +51,7 @@ public class PersonController : ApiController
     }
 
     [HttpGet("first")]
-    [Authorize(Policy = "admin")]
+    [Authorize(Policy = "user")]
     [ProducesResponseType(typeof(PersonResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPersonAsync(CancellationToken cancellationToken)
     {
