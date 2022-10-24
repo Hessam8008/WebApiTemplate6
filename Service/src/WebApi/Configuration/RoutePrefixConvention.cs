@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace WebApi.Configuration;
 
-internal class RoutePrefixConvention : IApplicationModelConvention
+internal class RoutePrefixConvention : IControllerModelConvention
 {
     private readonly AttributeRouteModel _routePrefix;
 
@@ -12,14 +12,12 @@ internal class RoutePrefixConvention : IApplicationModelConvention
         _routePrefix = new AttributeRouteModel(route);
     }
 
-    public void Apply(ApplicationModel application)
+    public void Apply(ControllerModel controller)
     {
-        foreach (var selector in application.Controllers.SelectMany(c => c.Selectors))
-            if (selector.AttributeRouteModel is null)
-                selector.AttributeRouteModel = _routePrefix;
-            else
-
-                selector.AttributeRouteModel =
-                    AttributeRouteModel.CombineAttributeRouteModel(_routePrefix, selector.AttributeRouteModel);
+        foreach (var selector in controller.Selectors)
+            selector.AttributeRouteModel =
+                selector.AttributeRouteModel is null
+                    ? _routePrefix
+                    : AttributeRouteModel.CombineAttributeRouteModel(_routePrefix, selector.AttributeRouteModel);
     }
 }
