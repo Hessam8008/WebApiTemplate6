@@ -9,12 +9,16 @@
   <ItemGroup>
     <Compile Remove="Controllers\**" />
     <Compile Remove="logs\**" />
+    <Compile Remove="Middlewares\**" />
     <Content Remove="Controllers\**" />
     <Content Remove="logs\**" />
+    <Content Remove="Middlewares\**" />
     <EmbeddedResource Remove="Controllers\**" />
     <EmbeddedResource Remove="logs\**" />
+    <EmbeddedResource Remove="Middlewares\**" />
     <None Remove="Controllers\**" />
     <None Remove="logs\**" />
+    <None Remove="Middlewares\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,10 +51,6 @@
     <ProjectReference Include="..\External\Persistence\Persistence.csproj" />
     <ProjectReference Include="..\External\Presentation\Presentation.csproj" />
     <ProjectReference Include="..\External\Publisher\Publisher.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Middlewares\" />
   </ItemGroup>
 
 </Project>

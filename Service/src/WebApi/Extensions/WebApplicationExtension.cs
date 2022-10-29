@@ -1,7 +1,5 @@
 ﻿using Application;
-using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Persistence;
 using Publisher;
 using Serilog;
@@ -28,7 +26,10 @@ public static class WebApplicationExtension
         builder.Services.ConfigureOptions<ConfigureJsonOptions>();
         builder.Services.ConfigureOptions<ConfigureSwaggerGenOptions>();
         builder.Services.ConfigureOptions<ConfigureSwaggerUiOptions>();
+        builder.Services.ConfigureOptions<ConfigureHealthCheck>();
 
+        // ↓ Does not work ↓   [Do it in pipeline]
+        // builder.Services.ConfigureOptions<ConfigureHealthCheckUi>();
 
         /* Add controllers */
         builder.Services
@@ -95,13 +96,17 @@ public static class WebApplicationExtension
 
         app.UseAuthorization();
 
-        app.MapHealthChecks("/hc", new HealthCheckOptions
-        {
-            Predicate = _ => true,
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        });
+        app.MapHealthChecks("/hc");
 
-        app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
+        // Does not work with:
+        // <code>
+        //      builder.Services.ConfigureOptions<ConfigureHealthCheckUi>();
+        // </code>
+        app.MapHealthChecksUI(o =>
+        {
+            var config = new ConfigureHealthCheckUi();
+            config.Configure(o);
+        });
 
 
         app.MapControllers()
