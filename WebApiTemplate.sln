@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architecture.Tests", "Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Service\src\External\Persistence\Persistence.csproj", "{0828BBD0-5985-4696-BD9A-29681F05B77C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Publisher", "Service\src\External\Publisher\Publisher.csproj", "{437450BD-1EE0-483E-B3FD-3F6E540CB212}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Publisher", "Service\src\External\Publisher\Publisher.csproj", "{437450BD-1EE0-483E-B3FD-3F6E540CB212}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

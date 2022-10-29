@@ -17,18 +17,7 @@ public static class WebApplicationExtension
     /// <param name="builder">Web application builder</param>
     public static void ConfigureServices(this WebApplicationBuilder builder)
     {
-        /* Add services to the container */
-        builder.Services
-            .AddControllers()
-            .AddApplicationPart(Presentation.AssemblyReference.Assembly)
-            .AddJsonOptions(options => options.Configure());
-
-
-        builder.Services.AddHttpContextAccessor();
-
-        /* Add version to the API */
-        builder.Services.AddApiVersioning();
-        builder.Services.AddVersionedApiExplorer();
+        /* Add configuration */
         builder.Services.ConfigureOptions<ConfigureApiVersioningOptions>();
         builder.Services.ConfigureOptions<ConfigureApiExplorerOptions>();
         builder.Services.ConfigureOptions<ConfigureApiBehaviorOptions>();
@@ -36,19 +25,36 @@ public static class WebApplicationExtension
         builder.Services.ConfigureOptions<ConfigureAuthorizationOptions>();
         builder.Services.ConfigureOptions<ConfigureJwtBearerOptions>();
         builder.Services.ConfigureOptions<ConfigureSerilogOptions>();
-
-
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.ConfigureOptions<ConfigureJsonOptions>();
         builder.Services.ConfigureOptions<ConfigureSwaggerGenOptions>();
         builder.Services.ConfigureOptions<ConfigureSwaggerUiOptions>();
 
 
+        /* Add controllers */
+        builder.Services
+            .AddControllers()
+            .AddApplicationPart(Presentation.AssemblyReference.Assembly);
+
+        builder.Services.AddHttpContextAccessor();
+
+        /* Add versioning */
+        builder.Services.AddApiVersioning();
+        builder.Services.AddVersionedApiExplorer();
+
+        /* Add Swagger */
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        /* Add application layer */
         builder.Services.AddApplication();
+
+        /* Add persistence layer */
         builder.Services.AddPersistence(builder.Configuration);
 
+        /* Add event publisher (Outbox pattern) */
         builder.Services.AddOutboxMessagePublisher();
 
+        /* Add health check */
         builder.Services.AddHealthChecks()
             .AddSqlConnectionHealthCheck();
 
@@ -56,12 +62,13 @@ public static class WebApplicationExtension
             .AddInMemoryStorage();
 
 
+        /* Add authentication and authorization */
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer();
 
         builder.Services.AddAuthorization();
 
-        /* Log configuration */
+        /* Add log configuration */
         builder.Host.UseSerilog((ctx, lc) =>
             lc.ReadFrom.Configuration(ctx.Configuration));
     }
