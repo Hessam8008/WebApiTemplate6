@@ -1,5 +1,7 @@
 ﻿using Application;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Persistence;
 using Publisher;
 using Serilog;
@@ -80,19 +82,19 @@ public static class WebApplicationExtension
 
         app.UseHsts();
 
-        //app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
 
-        //app.UseAuthentication();
+        app.UseAuthentication();
 
-        //app.UseAuthorization();
+        app.UseAuthorization();
 
-        //app.MapHealthChecks("/hc", new HealthCheckOptions
-        //{
-        //    Predicate = _ => true,
-        //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        //});
+        app.MapHealthChecks("/hc", new HealthCheckOptions
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
 
-        //app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
+        app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
 
 
         app.MapControllers()
