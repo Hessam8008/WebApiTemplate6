@@ -1,11 +1,12 @@
 ﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
-namespace WebApi.Extensions;
+namespace WebApi.Configuration;
 
-public static class ApiBehaviorOptionsExtension
+public class ConfigureApiBehaviorOptions : IConfigureNamedOptions<ApiBehaviorOptions>
 {
-    public static void Configure(this ApiBehaviorOptions options)
+    public void Configure(ApiBehaviorOptions options)
     {
         options.InvalidModelStateResponseFactory = context =>
             new BadRequestObjectResult(context.ModelState)
@@ -17,5 +18,10 @@ public static class ApiBehaviorOptionsExtension
                     MediaTypeNames.Application.Xml
                 }
             };
+    }
+
+    public void Configure(string name, ApiBehaviorOptions options)
+    {
+        Configure(options);
     }
 }

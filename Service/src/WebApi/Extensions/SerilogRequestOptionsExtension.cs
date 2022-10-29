@@ -22,8 +22,8 @@ public static class SerilogRequestOptionsExtension
 
             diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
             diagnosticContext.Set("RequestProtocol", httpContext.Request.Protocol);
-            diagnosticContext.Set("UserName", httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            diagnosticContext.Set("UserId", httpContext.User.FindFirstValue(ClaimTypes.Name));
+            diagnosticContext.Set("UserName", httpContext.User.FindFirstValue(ClaimTypes.Name));
+            diagnosticContext.Set("UserId", httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         };
     }
 }
