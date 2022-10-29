@@ -1,12 +1,13 @@
 ﻿using System.Security.Claims;
+using Microsoft.Extensions.Options;
 using Serilog.AspNetCore;
 using Serilog.Events;
 
-namespace WebApi.Extensions;
+namespace WebApi.Configuration;
 
-public static class SerilogRequestOptionsExtension
+internal class ConfigureSerilogOptions : IConfigureNamedOptions<RequestLoggingOptions>
 {
-    public static void Configuration(this RequestLoggingOptions options)
+    public void Configure(RequestLoggingOptions options)
     {
         // Customize the message template
         options.MessageTemplate = "Handled {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
@@ -25,5 +26,10 @@ public static class SerilogRequestOptionsExtension
             diagnosticContext.Set("UserName", httpContext.User.FindFirstValue(ClaimTypes.Name));
             diagnosticContext.Set("UserId", httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         };
+    }
+
+    public void Configure(string name, RequestLoggingOptions options)
+    {
+        Configure(options);
     }
 }

@@ -33,6 +33,7 @@ public static class WebApplicationExtension
         builder.Services.ConfigureOptions<ConfigureMvcOptions>();
         builder.Services.ConfigureOptions<ConfigureAuthorizationOptions>();
         builder.Services.ConfigureOptions<ConfigureJwtBearerOptions>();
+        builder.Services.ConfigureOptions<ConfigureSerilogOptions>();
 
 
         builder.Services.AddEndpointsApiExplorer();
@@ -67,7 +68,7 @@ public static class WebApplicationExtension
     public static void ConfigurePipeline(this WebApplication app)
     {
         /* Configure the HTTP request pipeline */
-        app.UseSerilogRequestLogging(options => options.Configuration());
+        app.UseSerilogRequestLogging();
 
         if (app.Environment.IsDevelopment())
         {
