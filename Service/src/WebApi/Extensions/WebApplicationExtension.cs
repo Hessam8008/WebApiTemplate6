@@ -1,5 +1,7 @@
 ﻿using Application;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Persistence;
+using Publisher;
 using Serilog;
 using WebApi.Configuration;
 
@@ -52,10 +54,9 @@ public static class WebApplicationExtension
 
 
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-                options => options.Configure());
+            .AddJwtBearer();
 
-        builder.Services.AddAuthorization(options => options.Configure());
+        builder.Services.AddAuthorization();
 
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>
