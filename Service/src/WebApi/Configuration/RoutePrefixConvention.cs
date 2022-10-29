@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.Routing;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace WebApi.Configuration;
 
@@ -7,9 +7,9 @@ internal class RoutePrefixConvention : IControllerModelConvention
 {
     private readonly AttributeRouteModel _routePrefix;
 
-    public RoutePrefixConvention(IRouteTemplateProvider route)
+    public RoutePrefixConvention(string template = "api/[controller]")
     {
-        _routePrefix = new AttributeRouteModel(route);
+        _routePrefix = new AttributeRouteModel(new RouteAttribute(template));
     }
 
     public void Apply(ControllerModel controller)

@@ -74,14 +74,6 @@ public static class WebApplicationExtension
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-            //    foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions.Reverse())
-            //        options.SwaggerEndpoint(
-            //            $"/swagger/{description.GroupName}/swagger.json",
-            //            description.GroupName.ToUpperInvariant() + (description.IsDeprecated ? " [Deprecated]" : ""));
-            //});
         }
 
         app.UseExceptionHandler("/error");
@@ -101,6 +93,7 @@ public static class WebApplicationExtension
         });
 
         app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
+
 
         app.MapControllers()
             .RequireAuthorization();

@@ -8,10 +8,18 @@ namespace WebApi.Configuration;
 
 public class ConfigureMvcOptions : IConfigureNamedOptions<MvcOptions>
 {
+    private readonly MvcSettings _mvcSettings;
+
+
+    public ConfigureMvcOptions(IConfiguration configuration)
+    {
+        _mvcSettings = configuration.GetSection(nameof(MvcSettings)).Get<MvcSettings>()??new MvcSettings();
+    }
+
+
     public void Configure(MvcOptions options)
     {
-        options.Conventions.Add(
-            new RoutePrefixConvention(new RouteAttribute("api/v{version:apiVersion}/[controller]")));
+        options.Conventions.Add(new RoutePrefixConvention(_mvcSettings.RouteTemplate));
 
         // Add filters
         options.Filters.Add<HttpResponseResultWrapperFilter>(); // For Result object
@@ -33,5 +41,10 @@ public class ConfigureMvcOptions : IConfigureNamedOptions<MvcOptions>
     public void Configure(string name, MvcOptions options)
     {
         Configure(options);
+    }
+
+    private class MvcSettings
+    {
+        public string RouteTemplate { get; set; } = "api/v{version:apiVersion}/[controller]";
     }
 }
