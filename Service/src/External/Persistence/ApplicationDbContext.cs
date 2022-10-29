@@ -12,7 +12,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<OutboxMessage>? OutboxMessages { get; set; }
 
-    public ApplicationDbContext(DbContextOptions options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
 

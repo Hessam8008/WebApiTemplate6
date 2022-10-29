@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Persistence;
 using Publisher;
 using Serilog;
+using WebApi.Configuration;
 
 namespace WebApi.Extensions;
 
@@ -18,33 +19,47 @@ public static class WebApplicationExtension
     {
         /* Add services to the container */
         builder.Services
-            .AddControllers(options => options.Configure())
+            .AddControllers()
             .AddApplicationPart(Presentation.AssemblyReference.Assembly)
-            .ConfigureApiBehaviorOptions(options => options.Configure())
             .AddJsonOptions(options => options.Configure());
 
-        /* Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle */
-        builder.Services.AddEndpointsApiExplorer(); //
-        builder.Services.AddSwaggerGen(options => options.Configure(builder.Configuration));
 
+        builder.Services.AddHttpContextAccessor();
+
+        /* Add version to the API */
+        builder.Services.AddApiVersioning();
+        builder.Services.AddVersionedApiExplorer();
+        builder.Services.ConfigureOptions<ConfigureApiVersioningOptions>();
+        builder.Services.ConfigureOptions<ConfigureApiExplorerOptions>();
+        builder.Services.ConfigureOptions<ConfigureApiBehaviorOptions>();
+        builder.Services.ConfigureOptions<ConfigureMvcOptions>();
+        builder.Services.ConfigureOptions<ConfigureAuthorizationOptions>();
+        builder.Services.ConfigureOptions<ConfigureJwtBearerOptions>();
+
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.ConfigureOptions<ConfigureSwaggerGenOptions>();
+        builder.Services.ConfigureOptions<ConfigureSwaggerUiOptions>();
+
+
+        /* Add layers */
         builder.Services.AddApplication();
-
         builder.Services.AddPersistence(builder.Configuration);
-
         builder.Services.AddOutboxMessagePublisher();
 
+        /* Add health check (service & UI) */
         builder.Services.AddHealthChecks()
             .AddSqlConnectionHealthCheck();
-
         builder.Services.AddHealthChecksUI()
             .AddInMemoryStorage();
 
+        /* Add Authentication & Authorization */
+        builder.Services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer()            ;
+        builder.Services.AddAuthorization();
 
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-                options => options.Configure());
-
-        builder.Services.AddAuthorization(options => options.Configure());
 
         /* Log configuration */
         builder.Host.UseSerilog((ctx, lc) =>
@@ -60,7 +75,7 @@ public static class WebApplicationExtension
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI(options => options.Configure());
+            app.UseSwaggerUI();
         }
 
         app.UseExceptionHandler("/error");
@@ -81,6 +96,8 @@ public static class WebApplicationExtension
 
         app.MapHealthChecksUI(c => c.UIPath = "/hc-ui");
 
-        app.MapControllers();
+
+        app.MapControllers()
+            .RequireAuthorization();
     }
 }
