@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WebApi.Extensions;
+namespace WebApi.Configuration;
 
-internal static class JwtOptionsExtension
+internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
 {
-    public static void Configure(this JwtBearerOptions options)
+    public void Configure(string name, JwtBearerOptions options)
     {
         options.Authority = "http://10.10.1.103:8300";
         options.SaveToken = true;
@@ -15,5 +16,10 @@ internal static class JwtOptionsExtension
             ValidateIssuer = false,
             ValidateAudience = false
         };
+    }
+
+    public void Configure(JwtBearerOptions options)
+    {
+        Configure(options);
     }
 }

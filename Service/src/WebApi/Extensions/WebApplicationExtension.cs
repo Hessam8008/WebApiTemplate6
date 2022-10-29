@@ -33,6 +33,8 @@ public static class WebApplicationExtension
         builder.Services.ConfigureOptions<ConfigureApiExplorerOptions>();
         builder.Services.ConfigureOptions<ConfigureApiBehaviorOptions>();
         builder.Services.ConfigureOptions<ConfigureMvcOptions>();
+        builder.Services.ConfigureOptions<ConfigureAuthorizationOptions>();
+        builder.Services.ConfigureOptions<ConfigureJwtBearerOptions>();
 
 
         builder.Services.AddEndpointsApiExplorer();
@@ -53,10 +55,10 @@ public static class WebApplicationExtension
             .AddInMemoryStorage();
 
         /* Add Authentication & Authorization */
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-                options => options.Configure());
-        builder.Services.AddAuthorization(options => options.Configure());
+        builder.Services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer()            ;
+        builder.Services.AddAuthorization();
 
 
         /* Log configuration */
