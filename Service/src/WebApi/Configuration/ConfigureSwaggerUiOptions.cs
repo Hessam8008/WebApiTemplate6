@@ -20,7 +20,7 @@ public class ConfigureSwaggerUiOptions
 
     public void Configure(SwaggerUIOptions options)
     {
-        var config = SwaggerConfig.GetInstance(_configuration);
+        var config = SwaggerSettings.GetInstance(_configuration);
 
         options.DefaultModelsExpandDepth(-1);
         if (config.OAuth2.UsePKCE) options.OAuthUsePkce();

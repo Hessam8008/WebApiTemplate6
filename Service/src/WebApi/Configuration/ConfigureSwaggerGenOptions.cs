@@ -25,7 +25,7 @@ public class ConfigureSwaggerGenOptions
     /// <param name="options"></param>
     public void Configure(SwaggerGenOptions options)
     {
-        var config = SwaggerConfig.GetInstance(_configuration);
+        var config = SwaggerSettings.GetInstance(_configuration);
 
         options.UseDateOnlyTimeOnlyStringConverters();
         options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -94,7 +94,7 @@ public class ConfigureSwaggerGenOptions
     private OpenApiInfo CreateVersionInfo(
         ApiVersionDescription desc)
     {
-        var config = SwaggerConfig.GetInstance(_configuration);
+        var config = SwaggerSettings.GetInstance(_configuration);
 
         var info = new OpenApiInfo
         {

@@ -1,19 +1,17 @@
-﻿namespace WebApi.Extensions;
+﻿namespace WebApi.Configuration;
 
-#region Configuration objects
-
-internal sealed record SwaggerConfig
+internal sealed record SwaggerSettings
 {
     private const string ConfigSection = "Swagger";
-    private static SwaggerConfig? _singleton;
+    private static SwaggerSettings? _singleton;
 
     public OAuth2 OAuth2 { get; set; }
 
     public Document Doc { get; set; }
 
-    public static SwaggerConfig GetInstance(IConfiguration configuration)
+    public static SwaggerSettings GetInstance(IConfiguration configuration)
     {
-        return _singleton ??= configuration.GetSection(ConfigSection).Get<SwaggerConfig>();
+        return _singleton ??= configuration.GetSection(ConfigSection).Get<SwaggerSettings>();
     }
 }
 
@@ -42,5 +40,3 @@ internal sealed record OAuth2
 
     public IEnumerable<string> ScopesArray => Scopes.Keys.ToArray();
 }
-
-#endregion
