@@ -20,6 +20,7 @@ public static class WebApplicationExtension
         builder.Services.ConfigureOptions<ConfigureApiExplorerOptions>();
         builder.Services.ConfigureOptions<ConfigureApiBehaviorOptions>();
         builder.Services.ConfigureOptions<ConfigureMvcOptions>();
+        builder.Services.ConfigureOptions<ConfigureExceptionHandlerOptions>();
         builder.Services.ConfigureOptions<ConfigureAuthorizationOptions>();
         builder.Services.ConfigureOptions<ConfigureJwtBearerOptions>();
         builder.Services.ConfigureOptions<ConfigureSerilogOptions>();
