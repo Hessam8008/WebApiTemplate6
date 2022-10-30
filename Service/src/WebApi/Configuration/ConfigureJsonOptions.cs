@@ -10,6 +10,7 @@ internal class ConfigureJsonOptions : IConfigureNamedOptions<JsonOptions>
     {
         options.UseDateOnlyTimeOnlyStringConverters();
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     }
 
     public void Configure(string name, JsonOptions options)
