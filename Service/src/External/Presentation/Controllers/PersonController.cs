@@ -11,12 +11,18 @@ using Presentation.Abstractions;
 
 namespace Presentation.Controllers;
 
+/// <summary>
+///     All methods to handle person affairs.
+/// </summary>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("")]
-//[Route("api/v{version:apiVersion}/[controller]")]
 public class PersonController : ApiController
 {
+    /// <summary>
+    ///     Constructor for the controller
+    /// </summary>
+    /// <param name="sender"></param>
     public PersonController(ISender sender) : base(sender)
     {
     }
@@ -97,6 +103,11 @@ public class PersonController : ApiController
         return Ok(k);
     }
 
+    /// <summary>
+    ///     Gets the person by identifier.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
+    /// <returns>Person who owns Id</returns>
     [HttpGet("{id:int}")]
     [Authorize(Policy = "user")]
     [ProducesResponseType(typeof(PersonDto), StatusCodes.Status200OK)]

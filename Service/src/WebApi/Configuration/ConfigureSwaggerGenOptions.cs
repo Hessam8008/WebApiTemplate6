@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using WebApi.Extensions;
 
 namespace WebApi.Configuration;
 
@@ -10,13 +10,13 @@ public class ConfigureSwaggerGenOptions
     : IConfigureNamedOptions<SwaggerGenOptions>
 {
     private readonly IApiVersionDescriptionProvider _provider;
-    private readonly IConfiguration _configuration;
+    private readonly SwaggerSettings _settings;
 
     public ConfigureSwaggerGenOptions(
         IApiVersionDescriptionProvider provider, IConfiguration configuration)
     {
         _provider = provider;
-        _configuration = configuration;
+        _settings = SwaggerSettings.GetInstance(configuration);
     }
 
     /// <summary>
@@ -25,8 +25,6 @@ public class ConfigureSwaggerGenOptions
     /// <param name="options"></param>
     public void Configure(SwaggerGenOptions options)
     {
-        var config = SwaggerSettings.GetInstance(_configuration);
-
         options.UseDateOnlyTimeOnlyStringConverters();
         options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
@@ -47,9 +45,9 @@ public class ConfigureSwaggerGenOptions
                 /* For 'implicit' use the below code */
                 Implicit = new OpenApiOAuthFlow
                 {
-                    AuthorizationUrl = new Uri(config.OAuth2.AuthorizationUrl),
-                    TokenUrl = new Uri(config.OAuth2.TokenUrl),
-                    Scopes = config.OAuth2.Scopes
+                    AuthorizationUrl = new Uri(_settings.OAuth2.AuthorizationUrl),
+                    TokenUrl = new Uri(_settings.OAuth2.TokenUrl),
+                    Scopes = _settings.OAuth2.Scopes
                 }
             }
         });
@@ -61,19 +59,18 @@ public class ConfigureSwaggerGenOptions
                 {
                     Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "oauth2"}
                 },
-                config.OAuth2.ScopesArray.ToList()
+                _settings.OAuth2.ScopesArray.ToList()
             }
         });
 
-        var xmlFilename = $"{Presentation.AssemblyReference.Assembly.GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
-        options.IncludeXmlComments(xmlPath);
+        // Add description and samples for methods, params, etc.
+        var presentationXml = GenerateXmlFilePath(Presentation.AssemblyReference.Assembly);
+        var applicationXml = GenerateXmlFilePath(Application.AssemblyReference.Assembly);
+        options.IncludeXmlComments(presentationXml);
+        options.IncludeXmlComments(applicationXml);
 
         // add swagger document for every API version discovered
-        foreach (var description in _provider.ApiVersionDescriptions)
-            options.SwaggerDoc(
-                description.GroupName,
-                CreateVersionInfo(description));
+        GenerateApiDescription(options);
     }
 
     /// <summary>
@@ -87,25 +84,47 @@ public class ConfigureSwaggerGenOptions
     }
 
     /// <summary>
+    ///     Generates the API description.
+    /// </summary>
+    /// <param name="options">The swagger options.</param>
+    private void GenerateApiDescription(SwaggerGenOptions options)
+    {
+        foreach (var description in _provider.ApiVersionDescriptions)
+            options.SwaggerDoc(
+                description.GroupName,
+                CreateVersionInfo(description));
+    }
+
+    /// <summary>
     ///     Create information about the version of the API
     /// </summary>
-    /// <param name="description"></param>
+    /// <param name="desc"></param>
     /// <returns>Information about the API</returns>
     private OpenApiInfo CreateVersionInfo(
         ApiVersionDescription desc)
     {
-        var config = SwaggerSettings.GetInstance(_configuration);
-
         var info = new OpenApiInfo
         {
-            Title = config.Doc.Title,
+            Title = _settings.Doc.Title,
             Version = desc.ApiVersion.ToString(),
-            Description = config.Doc.Description
+            Description = _settings.Doc.Description
         };
 
         if (desc.IsDeprecated)
             info.Description += " [Deprecated]";
 
         return info;
+    }
+
+    /// <summary>
+    ///     Generates the XML file path.
+    /// </summary>
+    /// <param name="assembly">The assembly.</param>
+    /// <returns>Path of the [AssemblyName.xml] include folder and file name.</returns>
+    private static string GenerateXmlFilePath(Assembly assembly)
+    {
+        var xmlFilename = $"{assembly.GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+        return xmlPath;
     }
 }
