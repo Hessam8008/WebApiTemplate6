@@ -2,7 +2,7 @@
 
 public interface IUnitOfWork
 {
-    IPersonRepository PersonRepository { get; }
+    IContactRepository ContactRepository { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

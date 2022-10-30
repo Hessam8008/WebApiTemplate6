@@ -17,7 +17,7 @@ public static class DependencyInjection
         var options = DatabaseSettings.GetInstance();
 
 
-        services.AddScoped<IPersonRepository, PeronRepository>();
+        services.AddScoped<IContactRepository, ContactRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<DomainEventsToOutboxInterceptor>();
         services.AddDbContext<ApplicationDbContext>((sp, option) =>

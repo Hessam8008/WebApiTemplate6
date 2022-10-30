@@ -6,13 +6,14 @@ public sealed class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _applicationDbContext;
 
-    public UnitOfWork(ApplicationDbContext applicationDbContext, IPersonRepository personRepository)
+    public UnitOfWork(ApplicationDbContext applicationDbContext, IContactRepository contactRepository)
     {
         _applicationDbContext = applicationDbContext;
-        PersonRepository = personRepository;
+        ContactRepository = contactRepository;
     }
 
-    public IPersonRepository PersonRepository { get; }
+
+    public IContactRepository ContactRepository { get; }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

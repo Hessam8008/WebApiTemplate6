@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Contract\Commands\ChangeNation\**" />
+    <EmbeddedResource Remove="Contract\Commands\ChangeNation\**" />
+    <None Remove="Contract\Commands\ChangeNation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Behaviors\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>

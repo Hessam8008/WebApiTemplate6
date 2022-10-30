@@ -62,5 +62,10 @@ public static partial class DomainErrors
                 $"{a}{Environment.NewLine}{b}");
             return new Error("General.MultiError", message);
         }
+
+        public static Error TooLong()
+        {
+            return new Error("Value.TooLong", "Value is too long.");
+        }
     }
 }

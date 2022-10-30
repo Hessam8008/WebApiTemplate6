@@ -11,7 +11,8 @@ namespace Presentation.Controllers;
 [ApiController]
 public class ErrorHandlingController : ControllerBase
 {
-    [Route("/error")]
+    //[ApiVersion("1.0")]
+    [Route("error")]
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult HandleErrorDevelopment([FromServices] IHostEnvironment hostEnvironment)
     {
