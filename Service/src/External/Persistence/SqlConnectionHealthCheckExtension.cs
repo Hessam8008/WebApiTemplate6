@@ -7,7 +7,7 @@ public static class SqlConnectionHealthCheckExtension
 {
     public static IHealthChecksBuilder AddSqlConnectionHealthCheck(this IHealthChecksBuilder hc)
     {
-        var options = DatabaseOptions.GetInstance();
+        var options = DatabaseSettings.GetInstance();
 
         hc.AddCheck(
             "sqlDatabase",

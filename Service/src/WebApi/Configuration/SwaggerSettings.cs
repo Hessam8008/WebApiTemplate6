@@ -2,7 +2,6 @@
 
 internal sealed record SwaggerSettings
 {
-    private const string ConfigSection = "Swagger";
     private static SwaggerSettings? _singleton;
 
     public OAuth2 OAuth2 { get; set; }
@@ -11,7 +10,7 @@ internal sealed record SwaggerSettings
 
     public static SwaggerSettings GetInstance(IConfiguration configuration)
     {
-        return _singleton ??= configuration.GetSection(ConfigSection).Get<SwaggerSettings>();
+        return _singleton ??= configuration.GetSection(nameof(SwaggerSettings)).Get<SwaggerSettings>();
     }
 }
 

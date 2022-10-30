@@ -2,11 +2,11 @@
 
 namespace Persistence;
 
-internal class DatabaseOptions
+internal class DatabaseSettings
 {
-    public static string ConfigurationName = nameof(DatabaseOptions);
+    public static string ConfigurationName = nameof(DatabaseSettings);
     private static IConfiguration? _configuration;
-    private static DatabaseOptions? _singleton;
+    private static DatabaseSettings? _singleton;
     private static readonly object Mutex = new();
 
 
@@ -22,7 +22,7 @@ internal class DatabaseOptions
         _configuration = config;
     }
 
-    public static DatabaseOptions GetInstance()
+    public static DatabaseSettings GetInstance()
     {
         if (_configuration is null)
             throw new ArgumentNullException(nameof(_configuration));
@@ -31,7 +31,7 @@ internal class DatabaseOptions
         {
             _singleton ??= _configuration
                 .GetSection(ConfigurationName)
-                .Get<DatabaseOptions>();
+                .Get<DatabaseSettings>();
         }
 
         return _singleton;

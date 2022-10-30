@@ -12,9 +12,9 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services,
         ConfigurationManager configuration)
     {
-        DatabaseOptions.SetConfiguration(configuration);
+        DatabaseSettings.SetConfiguration(configuration);
 
-        var options = DatabaseOptions.GetInstance();
+        var options = DatabaseSettings.GetInstance();
 
 
         services.AddScoped<IPersonRepository, PeronRepository>();
