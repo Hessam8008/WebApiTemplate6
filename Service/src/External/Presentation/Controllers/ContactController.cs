@@ -1,4 +1,4 @@
-﻿using Application.Contract.Commands.CreateContract;
+﻿using Application.Contract.Commands.CreateContact;
 using Application.Contract.Queries.Get;
 using Application.Contract.Queries.GetAll;
 using MediatR;

@@ -1,11 +1,10 @@
 ﻿using Application.Abstractions;
-using Application.Contract.Commands.CreateContract;
 using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Primitives.Result;
 using Domain.ValueObjects;
 
-namespace Application.Persons.Commands.CreatePerson;
+namespace Application.Contract.Commands.CreateContact;
 
 public sealed class CreateContactCommandHandler : ICommandHandler<CreateContactCommand>
 {
