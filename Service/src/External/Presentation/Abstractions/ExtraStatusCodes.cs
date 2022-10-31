@@ -1,4 +1,4 @@
-﻿namespace Presentation.Controllers;
+﻿namespace Presentation.Abstractions;
 
 public static class ExtraStatusCodes
 {

@@ -28,9 +28,7 @@ public static class WebApplicationExtension
         builder.Services.ConfigureOptions<ConfigureSwaggerGenOptions>();
         builder.Services.ConfigureOptions<ConfigureSwaggerUiOptions>();
         builder.Services.ConfigureOptions<ConfigureHealthCheck>();
-
-        // ↓ Does not work ↓   [Do it in pipeline]
-        // builder.Services.ConfigureOptions<ConfigureHealthCheckUi>();
+        builder.Services.ConfigureOptions<ConfigureHealthCheckUi>();
 
         /* Add controllers */
         builder.Services
@@ -87,7 +85,7 @@ public static class WebApplicationExtension
             app.UseSwaggerUI();
         }
 
-        app.UseExceptionHandler("/error");
+        app.UseExceptionHandler();
 
         app.UseHsts();
 
@@ -97,18 +95,7 @@ public static class WebApplicationExtension
 
         app.UseAuthorization();
 
-        app.MapHealthChecks("/hc");
-
-        // Does not work with:
-        // <code>
-        //      builder.Services.ConfigureOptions<ConfigureHealthCheckUi>();
-        // </code>
-        app.MapHealthChecksUI(o =>
-        {
-            var config = new ConfigureHealthCheckUi();
-            config.Configure(o);
-        });
-
+        app.UseHealthCheck();
 
         app.MapControllers()
             .RequireAuthorization();
