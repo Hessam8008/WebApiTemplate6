@@ -2,6 +2,7 @@
 
 public enum Gender
 {
+    NotAvailable,
     Male,
     Female
 }

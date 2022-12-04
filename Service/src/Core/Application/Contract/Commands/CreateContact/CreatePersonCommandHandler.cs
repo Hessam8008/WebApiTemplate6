@@ -24,7 +24,7 @@ public sealed class CreateContactCommandHandler : ICommandHandler<CreateContactC
         if (result.IsFailure)
             return result;
 
-        var contact = Contact.Create(title, caption, internalNumber, command.Building);
+        var contact = Contact.Create(title, caption, internalNumber, command.Building, command.);
         await _unitOfWork.ContactRepository.InsertAsync(contact, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();

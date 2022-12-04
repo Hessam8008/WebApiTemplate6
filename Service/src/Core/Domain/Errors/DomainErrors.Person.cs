@@ -14,7 +14,7 @@ public static partial class DomainErrors
         public static readonly Error EmptyLastName = new("LastName.Empty", "Last name is empty.");
         public static readonly Error TooLongLastName = new("LastName.MaxLength", "Last name is too long.");
         public static readonly Error EmptyNationalCode = new("NationalCode.Empty", "National Code is empty.");
-        public static readonly Error InvalidBirthDay = new("BirthDay.Invalid", "Invalid day for birthday.");
+        public static readonly Error InvalidBirthday = new("Birthday.Invalid", "Invalid day for birthday.");
 
         public static readonly Error WrongLengthNationalCode =
             new("NationalCode.Length", "Length of the nation code is unacceptable.");

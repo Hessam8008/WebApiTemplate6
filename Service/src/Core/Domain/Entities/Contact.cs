@@ -27,7 +27,7 @@ public sealed class Contact : AggregateRoot
 
 
     public static Contact Create(ContactTitle title, ContactCaption caption, InternalNumber internalNumber,
-        Building building, EmployeeCode? employeeCode = null)
+        Building building, EmployeeCode? employeeCode, bool existsInternalNumber)
     {
         var result = new Contact
         {

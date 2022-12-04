@@ -6,5 +6,5 @@ public enum Building : byte
     Golriz,
     Negin,
     Arman,
-    DistOfMashhad
+    MashhadDistribution
 }
