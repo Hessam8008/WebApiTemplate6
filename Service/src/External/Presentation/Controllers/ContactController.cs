@@ -26,9 +26,9 @@ public class ContactController : ApiController
     }
 
     /// <summary>
-    ///     Registers the person asynchronous.
+    ///     Register new contact.
     /// </summary>
-    /// <param name="command">The command.</param>
+    /// <param name="command">Data for create contact.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns></returns>
     [HttpPost]
