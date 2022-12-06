@@ -1,7 +1,9 @@
 ﻿using System.Drawing;
 using Domain.DomainEvents;
 using Domain.Enums;
+using Domain.Errors;
 using Domain.Primitives;
+using Domain.Primitives.Result;
 using Domain.ValueObjects;
 
 namespace Domain.Entities;
@@ -26,9 +28,12 @@ public sealed class Contact : AggregateRoot
     public bool IsActive { get; private set; }
 
 
-    public static Contact Create(ContactTitle title, ContactCaption caption, InternalNumber internalNumber,
+    public static Result<Contact> Create(ContactTitle title, ContactCaption caption, InternalNumber internalNumber,
         Building building, EmployeeCode? employeeCode, bool existsInternalNumber)
     {
+        if (existsInternalNumber)
+            return DomainErrors.Contact.DuplicateInternalNumber(internalNumber);
+
         var result = new Contact
         {
             Title = title,

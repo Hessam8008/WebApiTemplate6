@@ -24,7 +24,7 @@ public sealed record CreateContactCommand : ICommand
     ///     The internal phone number in telephone central.
     /// </summary>
     /// <example>147</example>
-    public int InternalNumber { get; set; }
+    public short InternalNumber { get; set; }
 
     /// <summary>
     ///     Where the contact located is.

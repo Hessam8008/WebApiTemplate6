@@ -6,23 +6,23 @@ namespace Domain.ValueObjects;
 
 public class InternalNumber : ValueObject
 {
-    public InternalNumber(int value)
+    private InternalNumber(short value)
     {
         Value = value;
     }
 
-    public int Value { get; }
+    public short Value { get; }
 
-    public static Result<InternalNumber> Create(int value)
+    public static Result<InternalNumber> Create(short value)
     {
         if (value is 0 or >= 100 and <= 900)
             return new InternalNumber(value);
         return DomainErrors.General.ValueIsInvalid(nameof(InternalNumber), value.ToString());
     }
 
-    public static implicit operator int(InternalNumber value)
+    public static implicit operator short(InternalNumber value)
     {
-        return value.Value;
+        return value?.Value ?? 0;
     }
 
     protected override IEnumerable<object> GetAtomicValues()
