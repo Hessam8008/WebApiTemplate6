@@ -27,6 +27,9 @@ internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptio
             ValidateIssuer = _jwtSettings.ValidateIssuer,
             ValidAudience = _jwtSettings.ValidAudience,
             ValidateAudience = _jwtSettings.ValidateAudience,
+            ValidateLifetime = _jwtSettings.ValidateLifetime,
+            ValidateIssuerSigningKey = ._jwtSettings.ValidateIssuerSigningKey,
+
             NameClaimType = JwtClaimTypes.Name,
             RoleClaimType = JwtClaimTypes.Role
         };
