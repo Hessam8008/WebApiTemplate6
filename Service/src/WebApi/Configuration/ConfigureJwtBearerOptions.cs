@@ -6,13 +6,15 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace WebApi.Configuration;
 
+using Presentation.Models;
+
 internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
 {
     private readonly JwtSettings _jwtSettings;
 
-    public ConfigureJwtBearerOptions(IConfiguration configuration)
+    public ConfigureJwtBearerOptions(IOptions<JwtSettings> jwtSettingOptions)
     {
-        _jwtSettings = configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>() ?? new JwtSettings();
+        _jwtSettings = jwtSettingOptions.Value;
     }
 
     public void Configure(string name, JwtBearerOptions options)

@@ -1,4 +1,4 @@
-﻿namespace WebApi.Configuration;
+﻿namespace Presentation.Models;
 
 
 public class JwtSettings

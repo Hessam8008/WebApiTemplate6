@@ -7,6 +7,8 @@ using WebApi.Configuration;
 
 namespace WebApi.Extensions;
 
+using Presentation.Models;
+
 public static class WebApplicationExtension
 {
     /// <summary>
@@ -34,6 +36,9 @@ public static class WebApplicationExtension
         builder.Services
             .AddControllers()
             .AddApplicationPart(Presentation.AssemblyReference.Assembly);
+        
+        builder.Services.Configure<JwtSettings>(
+            builder.Configuration.GetSection(nameof(JwtSettings)));
 
         builder.Services.AddHttpContextAccessor();
 
@@ -52,7 +57,7 @@ public static class WebApplicationExtension
         builder.Services.AddPersistence(builder.Configuration);
 
         /* Add event publisher (Outbox pattern) */
-        builder.Services.AddOutboxMessagePublisher();
+        // builder.Services.AddOutboxMessagePublisher();
 
         /* Add health check */
         builder.Services.AddHealthChecks()
@@ -63,7 +68,12 @@ public static class WebApplicationExtension
 
 
         /* Add authentication and authorization */
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        builder.Services.AddAuthentication(option =>
+                {
+                    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                })
             .AddJwtBearer();
 
         builder.Services.AddAuthorization();
