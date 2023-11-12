@@ -36,17 +36,4 @@ internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptio
     {
         Configure(options);
     }
-
-
-    private class JwtSettings
-    {
-        public string Authority { get; set; } = "http://10.10.1.103:8300";
-        public string? Issuer { get; set; }
-        public string IssuerSigningKey { get; set; } = string.Empty;
-        public string? ValidAudience { get; set; }
-        public bool ValidateIssuer { get; set; }
-        public bool SaveToken { get; set; } = true;
-        public bool RequireHttpsMetadata { get; set; }
-        public bool ValidateAudience { get; set; }
-    }
 }
