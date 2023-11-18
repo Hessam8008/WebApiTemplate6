@@ -14,12 +14,20 @@ public static class DependencyInjection
     {
         DatabaseSettings.SetConfiguration(configuration);
 
-        var options = DatabaseSettings.GetInstance();
-
-
         services.AddScoped<IContactRepository, ContactRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<DomainEventsToOutboxInterceptor>();
+        services.AddSingleton<ICacheProvider, CacheProvider>();
+
+        AddDbContext(services);
+
+        return services;
+    }
+
+    private static void AddDbContext(IServiceCollection services)
+    {
+        var options = DatabaseSettings.GetInstance();
+
         services.AddDbContext<ApplicationDbContext>((sp, option) =>
         {
             var interceptor = sp.GetService<DomainEventsToOutboxInterceptor>();
@@ -32,6 +40,5 @@ public static class DependencyInjection
                 .EnableSensitiveDataLogging(options.EnableSensitiveDataLogging)
                 .AddInterceptors(interceptor);
         });
-        return services;
     }
 }
