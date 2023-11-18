@@ -1,16 +1,11 @@
-﻿namespace WebApi.Extensions;
-
-using Application;
-
+﻿using Application;
 using Microsoft.IdentityModel.Logging;
-
 using Persistence;
-
 using Presentation.Models;
-
 using Serilog;
-
 using WebApi.Configuration;
+
+namespace WebApi.Extensions;
 
 public static class WebApplicationExtension
 {
@@ -65,6 +60,8 @@ public static class WebApplicationExtension
         /* Add controllers */
         builder.Services.AddControllers().AddApplicationPart(Presentation.AssemblyReference.Assembly);
 
+        builder.Services.AddMemoryCache();
+
         builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(JwtSettings)));
 
         builder.Services.AddHttpContextAccessor();
@@ -102,6 +99,6 @@ public static class WebApplicationExtension
 
         /* Add log configuration */
         builder.Host.UseSerilog(
-            (HostBuilderContext ctx, LoggerConfiguration lc) => lc.ReadFrom.Configuration(ctx.Configuration));
+            (ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
     }
 }
