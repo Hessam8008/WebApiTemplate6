@@ -1,17 +1,26 @@
-﻿using MediatR;
+﻿namespace Application;
+
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Application
+/// <summary>
+///     Dependencies injection.
+/// </summary>
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    /// <summary>
+    ///     The add application layer services.
+    /// </summary>
+    /// <param name="services">
+    ///     The services.
+    /// </param>
+    /// <returns>
+    ///     The <see cref="IServiceCollection" />.
+    /// </returns>
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
-        {
-            /* Add MediateR */
-            services.AddMediatR(AssemblyReference.Assembly);
+        /* Add MediateR */
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AssemblyReference.Assembly));
 
-
-            return services;
-        }
+        return services;
     }
 }

@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿namespace WebApi.Configuration;
+
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 
-namespace WebApi.Configuration;
-
-public class ConfigureApiExplorerOptions
-    : IConfigureNamedOptions<ApiExplorerOptions>
+public class ConfigureApiExplorerOptions : IConfigureNamedOptions<ApiExplorerOptions>
 {
     public void Configure(ApiExplorerOptions options)
     {
@@ -14,6 +13,6 @@ public class ConfigureApiExplorerOptions
 
     public void Configure(string name, ApiExplorerOptions options)
     {
-        Configure(options);
+        this.Configure(options);
     }
 }

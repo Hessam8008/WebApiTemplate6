@@ -8,7 +8,8 @@ internal class ConfigureJsonOptions : IConfigureNamedOptions<JsonOptions>
 {
     public void Configure(JsonOptions options)
     {
-        options.UseDateOnlyTimeOnlyStringConverters();
+        //TODO: Remove when work with no problems
+        // options.UseDateOnlyTimeOnlyStringConverters();
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     }

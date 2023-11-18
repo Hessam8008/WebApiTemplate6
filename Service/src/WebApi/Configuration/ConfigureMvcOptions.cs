@@ -35,8 +35,9 @@ public class ConfigureMvcOptions : IConfigureNamedOptions<MvcOptions>
         options.Filters.Add(new ProducesResponseTypeAttribute(typeof(HttpExceptionResponse),
             StatusCodes.Status500InternalServerError));
 
+        //TODO: Remove when work with no problems
         // Add type convertor
-        options.UseDateOnlyTimeOnlyStringConverters();
+        // options.UseDateOnlyTimeOnlyStringConverters();
     }
 
     public void Configure(string name, MvcOptions options)
