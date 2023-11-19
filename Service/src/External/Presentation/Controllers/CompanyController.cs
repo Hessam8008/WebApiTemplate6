@@ -9,12 +9,12 @@ namespace Presentation.Controllers;
 [ApiVersion("1.0")]
 [ApiVersion("2.0")]
 [Route("")]
-public class GithubController : ApiController
+public class CompanyController : ApiController
 {
     /// <summary>
     /// </summary>
     /// <param name="sender"></param>
-    public GithubController(ISender sender) : base(sender)
+    public CompanyController(ISender sender) : base(sender)
     {
     }
 
@@ -25,5 +25,5 @@ public class GithubController : ApiController
     /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> GetOrgAsync(CancellationToken cancellationToken) =>
-        Ok(await Sender.Send(new GetAllOrgsQuery(), cancellationToken));
+        Ok(await Sender.Send(new GetCompaniesQuery(), cancellationToken));
 }
