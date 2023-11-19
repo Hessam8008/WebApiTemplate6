@@ -1,4 +1,5 @@
-﻿using Domain.Abstractions;
+﻿using Cache;
+using Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
