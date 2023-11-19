@@ -15,8 +15,8 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
-    <Folder Include="Github\Commands\" />
-    <Folder Include="Github\Events\" />
+    <Folder Include="Company\Commands\" />
+    <Folder Include="Company\Events\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>
 

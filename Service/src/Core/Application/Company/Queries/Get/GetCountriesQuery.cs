@@ -4,6 +4,6 @@ namespace Application.Github.Queries.Get;
 
 /// <summary>
 /// </summary>
-public record GetAllOrgsQuery : IQuery<List<GetOrgResponse>>
+public record GetCompaniesQuery : IQuery<List<GetCompaniesResponse>>
 {
 }
