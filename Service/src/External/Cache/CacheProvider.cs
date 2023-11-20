@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Cache;
 
-public class CacheProvider : ICacheProvider
+internal class CacheProvider : ICacheProvider
 {
     private static readonly SemaphoreSlim Semaphore = new(1, 1);
     private readonly IMemoryCache _cache;
@@ -12,14 +12,15 @@ public class CacheProvider : ICacheProvider
 
     public async Task<T?> GetCache<T>(string key) => await GetCachedResponse<T>(key);
 
-    public async Task AddCache<T>(string key, T value)
+    public async Task AddCache<T>(string key, T value, int expireInMinutes = 5)
     {
         try
         {
             await Semaphore.WaitAsync();
+
             var cacheEntryOptions = new MemoryCacheEntryOptions
             {
-                AbsoluteExpiration = DateTime.Now.AddMinutes(5),
+                AbsoluteExpiration = DateTime.Now.AddMinutes(expireInMinutes),
                 SlidingExpiration = TimeSpan.FromMinutes(2),
                 Size = 1024
             };
