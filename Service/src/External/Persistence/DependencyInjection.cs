@@ -15,11 +15,15 @@ public static class DependencyInjection
     {
         DatabaseSettings.SetConfiguration(configuration);
 
+        /* Add cache */
+        services.AddCache();
+
+        /* Add services */
         services.AddScoped<IContactRepository, ContactRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<DomainEventsToOutboxInterceptor>();
-        services.AddSingleton<ICacheProvider, CacheProvider>();
 
+        /* Add database context */
         AddDbContext(services);
 
         return services;

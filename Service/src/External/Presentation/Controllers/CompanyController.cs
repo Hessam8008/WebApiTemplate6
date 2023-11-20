@@ -1,6 +1,7 @@
-﻿using Application.Github.Queries.Get;
+﻿using Application.Company.Queries.Get;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Presentation.Abstractions;
 
 namespace Presentation.Controllers;
@@ -24,6 +25,7 @@ public class CompanyController : ApiController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
+    [OutputCache(Duration = 10)]
     public async Task<IActionResult> GetOrgAsync(CancellationToken cancellationToken) =>
         Ok(await Sender.Send(new GetCompaniesQuery(), cancellationToken));
 }

@@ -1,23 +1,19 @@
-﻿namespace Presentation.Controllers;
-
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
 using IdentityModel;
-
 using MediatR;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-
 using Presentation.Abstractions;
 using Presentation.Models;
 
+namespace Presentation.Controllers;
+
 /// <summary>
-/// User actions
+///     User actions
 /// </summary>
 [ApiController]
 [ApiVersion("1.0")]
@@ -30,51 +26,46 @@ public class UserController : ApiController
     private readonly JwtSettings _jwtSettings;
 
     /// <summary>
-    /// User controller
+    ///     User controller
     /// </summary>
     /// <param name="sender">MediatR sender</param>
-    /// <param name="jwtSettingsOption">jwt setting options</param>
-    public UserController(ISender sender, IOptions<JwtSettings> jwtSettingsOption)
-        : base(sender)
-    {
-        this._jwtSettings = jwtSettingsOption.Value;
-    }
+    /// <param name="configuration"></param>
+    public UserController(ISender sender, IConfiguration configuration)
+        : base(sender) =>
+        _jwtSettings = configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>() ?? new JwtSettings();
 
     [HttpGet("Token")]
     [AllowAnonymous]
-    public IActionResult GenerateJWT()
-    {
-        return this.Ok(this.GenerateToken());
-    }
+    public IActionResult GenerateJWT() => Ok(GenerateToken());
 
     /// <summary>
-    /// User identity information
+    ///     User identity information
     /// </summary>
     /// <returns></returns>
     [HttpGet]
     public IActionResult WhoIAm()
     {
         var dic = new
-                      {
-                          this.User.Identity?.Name,
-                          Claims = this.User.Claims.Select((Claim x) => new { x.Type, x.Value, x.ValueType })
-                      };
+        {
+            User.Identity?.Name,
+            Claims = User.Claims.Select(x => new { x.Type, x.Value, x.ValueType })
+        };
 
-        return this.Ok(dic);
+        return Ok(dic);
     }
 
     private string GenerateToken()
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._jwtSettings.IssuerSigningKey));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.IssuerSigningKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new[]
-                         {
-                             new Claim(JwtClaimTypes.Name, "Demo User"), new Claim(JwtClaimTypes.Role, "DemoUser"),
-                             new Claim(JwtClaimTypes.Email, "Demo@WebApi.com")
-                         };
+        {
+            new Claim(JwtClaimTypes.Name, "Demo User"), new Claim(JwtClaimTypes.Role, "DemoUser"),
+            new Claim(JwtClaimTypes.Email, "Demo@WebApi.com")
+        };
         var token = new JwtSecurityToken(
-            this._jwtSettings.Issuer,
-            this._jwtSettings.ValidAudience,
+            _jwtSettings.Issuer,
+            _jwtSettings.ValidAudience,
             claims,
             expires: DateTime.Now.AddMinutes(15),
             signingCredentials: credentials);

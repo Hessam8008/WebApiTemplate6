@@ -1,7 +1,6 @@
 ﻿using Application;
 using Microsoft.IdentityModel.Logging;
 using Persistence;
-using Presentation.Models;
 using Serilog;
 using WebApi.Configuration;
 
@@ -32,6 +31,8 @@ public static class WebApplicationExtension
 
         app.UseHealthCheck();
 
+        app.UseOutputCache();
+
         app.MapControllers().RequireAuthorization();
     }
 
@@ -56,14 +57,15 @@ public static class WebApplicationExtension
         builder.Services.ConfigureOptions<ConfigureSwaggerUiOptions>();
         builder.Services.ConfigureOptions<ConfigureHealthCheck>();
         builder.Services.ConfigureOptions<ConfigureHealthCheckUi>();
+        builder.Services.ConfigureOptions<ConfigureOutputCacheOptions>();
 
         /* Add controllers */
         builder.Services.AddControllers().AddApplicationPart(Presentation.AssemblyReference.Assembly);
 
-        builder.Services.AddMemoryCache();
+        /* Add output cache */
+        builder.Services.AddOutputCache();
 
-        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(JwtSettings)));
-
+        /* Add HttpContextAccessor */
         builder.Services.AddHttpContextAccessor();
 
         /* Add DateOnly & TimeOnly type for Json convertor */
