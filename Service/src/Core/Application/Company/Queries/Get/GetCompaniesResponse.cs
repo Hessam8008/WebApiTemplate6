@@ -1,4 +1,4 @@
-﻿namespace Application.Github.Queries.Get;
+﻿namespace Application.Company.Queries.Get;
 
 public class GetCompaniesResponse
 {

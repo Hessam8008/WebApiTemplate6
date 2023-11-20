@@ -1,6 +1,6 @@
 ﻿using Application.Abstractions;
 
-namespace Application.Github.Queries.Get;
+namespace Application.Company.Queries.Get;
 
 /// <summary>
 /// </summary>

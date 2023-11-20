@@ -4,9 +4,9 @@ using Application.Abstractions;
 using Domain.Abstractions;
 using Domain.Primitives.Result;
 
-namespace Application.Github.Queries.Get;
+namespace Application.Company.Queries.Get;
 
-public class GetCountriesQueryHandler : IQueryHandler<GetCompaniesQuery, List<GetCompaniesResponse>>
+public class GetCompaniesQueryHandler : IQueryHandler<GetCompaniesQuery, List<GetCompaniesResponse>>
 {
     private static readonly string CacheKey = "AllCities";
     private readonly ICacheProvider _cacheProvider;
@@ -15,7 +15,7 @@ public class GetCountriesQueryHandler : IQueryHandler<GetCompaniesQuery, List<Ge
     ///     Constructor for get all cities.
     /// </summary>
     /// <param name="cacheProvider"></param>
-    public GetCountriesQueryHandler(ICacheProvider cacheProvider) => _cacheProvider = cacheProvider;
+    public GetCompaniesQueryHandler(ICacheProvider cacheProvider) => _cacheProvider = cacheProvider;
 
     /// <summary>
     ///     Get all cities with state.
